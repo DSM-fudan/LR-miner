@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: javaGeom-0.10.3.jar commons-lang-2.6.jar trove-1.0.2.jar l
+ og4j-1.2.16.jar commons-io-1.3.2.jar commons-collections-3.2.1.jar co
+ mmons-math3-3.0.jar
+Main-Class: cn.edu.fudan.dsm.tslrm.Satellite2SimilaritySearch
+

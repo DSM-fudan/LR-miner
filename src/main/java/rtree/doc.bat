@@ -1,0 +1,1 @@
+javadoc -classpath c:/projects/java/rtree -version -use -windowtitle "RTree" -author -d doc *.java
