@@ -1,2 +1,2 @@
-# LRminer
-Finding Maximal Significant Linear Representation between Long Time Series
+# LR-miner
+*Finding Maximal Significant Linear Representation between Long Time Series*
