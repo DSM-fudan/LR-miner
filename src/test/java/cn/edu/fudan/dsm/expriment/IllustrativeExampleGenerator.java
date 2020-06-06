@@ -69,14 +69,14 @@ public class IllustrativeExampleGenerator {
         PLARegionSearch plaRegionSearch = new PLARegionSearch(point2Ds);
         plaRegionSearch.errorBound = epsilon;
         for (int j = segs.size() - 1; j >= 0; j--) {
-            if (segs.get(j).getPolygonKB().getRings().size() > 1) {
+            if (segs.get(j).getPolygonKB().boundary().size() > 1) {
                 segs.remove(j);
                 System.out.println("Remove at " + j);
             }
         }
         Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, epsilon / 2.0);
-        double k = point2Ds1.getX();
-        double b = point2Ds1.getY();
+        double k = point2Ds1.x();
+        double b = point2Ds1.y();
 
         // Step 8: output the series and results
         long time = System.currentTimeMillis();
@@ -97,8 +97,8 @@ public class IllustrativeExampleGenerator {
         int consecutiveNum = 0;
         PrintWriter pw = new PrintWriter(new FileWriter(outFile));
         for (Point2D point : points) {
-            double x = point.getX();
-            double y = point.getY();
+            double x = point.x();
+            double y = point.y();
             double estimateY = k * x + b;
             if (Math.abs(estimateY - y) < errorBound) {
                 consecutiveNum++;

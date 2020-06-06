@@ -12,7 +12,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -107,7 +106,7 @@ public class ForexCorrelationTest {
         plaRegionSearch.errorBound = errorBound;
 
         for(int i = segs.size() - 1; i >= 0; i--){
-            if(segs.get(i).getPolygonKB().getRings().size() > 1){
+            if(segs.get(i).getPolygonKB().boundary().size() > 1){
                 segs.remove(i);
                 logger.debug("Remove at " + i);
             }
@@ -118,15 +117,15 @@ public class ForexCorrelationTest {
         Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, accuracy);
         stopWatch2.stop();
 
-        logger.debug("point2Ds1.getX() k= " + point2Ds1.getX());
-        logger.debug("point2Ds1.getY() b= " + point2Ds1.getY());
+        logger.debug("point2Ds1.getX() k= " + point2Ds1.x());
+        logger.debug("point2Ds1.getY() b= " + point2Ds1.y());
         logger.debug("PartitionNum = " + plaRegionSearch.partitionNum);
         logger.debug("RealLength = " + plaRegionSearch.finalLength);
         logger.debug("CountInsides = " + plaRegionSearch.countInsides);
         logger.debug("stopWatchInsides = " + plaRegionSearch.stopWatchInsides.getTime());
-        Set<Integer> positions = SegmentUtils.verifyTrueLengthReturnPoints(point2Ds,point2Ds1.getX(),point2Ds1.getY(),errorBound,consecutive);
+        Set<Integer> positions = SegmentUtils.verifyTrueLengthReturnPoints(point2Ds,point2Ds1.x(),point2Ds1.y(),errorBound,consecutive);
         logger.debug("positions.size() = " + positions.size());
-        ForexCorrelation ret = new ForexCorrelation(dataX.secondCurrency,dataY.secondCurrency,errorBound,point2Ds1.getX(),point2Ds1.getY(),plaRegionSearch.finalLength,dataX,dataY,positions);
+        ForexCorrelation ret = new ForexCorrelation(dataX.secondCurrency,dataY.secondCurrency,errorBound,point2Ds1.x(),point2Ds1.y(),plaRegionSearch.finalLength,dataX,dataY,positions);
 
         return ret;
     }

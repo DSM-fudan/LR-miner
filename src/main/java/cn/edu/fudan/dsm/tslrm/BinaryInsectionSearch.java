@@ -12,7 +12,6 @@ import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
 
 public class BinaryInsectionSearch {
 	
@@ -37,12 +36,12 @@ public class BinaryInsectionSearch {
 		for(int i = 0; i < segmentList.size(); i++){
 			PLASegment seg = segmentList.get(i);
 			BinaryInsectionInfo binaryInfo = new BinaryInsectionInfo(seg.getStart(), seg.getEnd(), seg.getLength(), seg.getPolygonKB());
-			Point2D tempKB = seg.getPolygonKB().getCentroid();
-			int lowBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segLength);
+			Point2D tempKB = seg.getPolygonKB().centroid();
+			int lowBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segLength);
 			if(lowBound > maxLength){
 				maxLength = lowBound;
-				maxK = tempKB.getX();
-				maxB = tempKB.getY();
+				maxK = tempKB.x();
+				maxB = tempKB.y();
 			}
 			ArrayList<BinaryInsectionInfo> segList = new ArrayList<BinaryInsectionInfo>();
 			segList.add(binaryInfo);
@@ -76,7 +75,7 @@ public class BinaryInsectionSearch {
 								tempgroup2.delete();
 							}
 							intersection = NewPolyUtils.intersection(tempgroup1.getPoly(), tempgroup2.getPoly());
-							if(intersection.getVertexNumber() > 0){
+							if(intersection.vertexNumber() > 0){
 								BinaryInsectionInfo newInsectionInfo = new BinaryInsectionInfo();
 								newGroup.add(newInsectionInfo);
 								tempgroup1.addChild(newInsectionInfo);
@@ -93,12 +92,12 @@ public class BinaryInsectionSearch {
 									newInsectionInfo.setCurrentLength(tempgroup1.getCurrentLength() + tempgroup2.getCurrentLength() - 
 											(tempgroup1.getEnd() - tempgroup2.getStart() + 1));
 								}
-								Point2D tempKB = intersection.getCentroid();
-								int lowBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segLength);
+								Point2D tempKB = intersection.centroid();
+								int lowBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segLength);
 	            				if(lowBound > maxLength){
 	            					maxLength = lowBound;
-	            					maxK = tempKB.getX();
-	            					maxB = tempKB.getY();
+	            					maxK = tempKB.x();
+	            					maxB = tempKB.y();
 	            				}
 							}
 						}
@@ -214,28 +213,28 @@ public class BinaryInsectionSearch {
 					try {
 						PrintWriter print1 = new PrintWriter(new FileWriter("data\\Exception1.txt"));
 						PrintWriter print2 = new PrintWriter(new FileWriter("data\\Exception2.txt"));
-						for(int l = 0; l < tempInfo.getPoly().getVertexNumber(); l++){
-							print1.println(tempInfo.getPoly().getVertex(l).getX() + " " + proInfo.getPoly().getVertex(l).getX());
-							print2.println(tempInfo.getPoly().getVertex(l).getY() + " " + proInfo.getPoly().getVertex(l).getY());
+						for(int l = 0; l < tempInfo.getPoly().vertexNumber(); l++){
+							print1.println(tempInfo.getPoly().vertex(l).x() + " " + proInfo.getPoly().vertex(l).x());
+							print2.println(tempInfo.getPoly().vertex(l).y() + " " + proInfo.getPoly().vertex(l).y());
 						}
-						print1.println(tempInfo.getPoly().getVertex(0).getX() + " " + proInfo.getPoly().getVertex(0).getX());
-						print2.println(tempInfo.getPoly().getVertex(0).getY() + " " + proInfo.getPoly().getVertex(0).getY());
+						print1.println(tempInfo.getPoly().vertex(0).x() + " " + proInfo.getPoly().vertex(0).x());
+						print2.println(tempInfo.getPoly().vertex(0).y() + " " + proInfo.getPoly().vertex(0).y());
 						print1.close();
 						print2.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					for(int l = 0; l < tempInfo.getPoly().getVertexNumber(); l++){
-						System.out.println("vetex Num " + l +": X = " + tempInfo.getPoly().getVertex(l).getX() + "  Y = "+ tempInfo.getPoly().getVertex(l).getY());
+					for(int l = 0; l < tempInfo.getPoly().vertexNumber(); l++){
+						System.out.println("vetex Num " + l +": X = " + tempInfo.getPoly().vertex(l).x() + "  Y = "+ tempInfo.getPoly().vertex(l).y());
 					}
 					System.out.println("*******************");
-					for(int l = 0; l < proInfo.getPoly().getVertexNumber(); l++){
-						System.out.println("vetex Num " + l +": X = " + proInfo.getPoly().getVertex(l).getX() + "  Y = "+ proInfo.getPoly().getVertex(l).getY());
+					for(int l = 0; l < proInfo.getPoly().vertexNumber(); l++){
+						System.out.println("vetex Num " + l +": X = " + proInfo.getPoly().vertex(l).x() + "  Y = "+ proInfo.getPoly().vertex(l).y());
 					}
 				}
 //				Polygon2D intersection = Polygon2DUtils.intersection(tempInfo.getPoly(), proInfo.getPoly());
-				if(intersection.getVertexNumber() > 0){
+				if(intersection.vertexNumber() > 0){
 					if(lastEnd < tempInfo.getStart()){
 						upBound += tempInfo.getCurrentLength();
 					}else{

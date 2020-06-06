@@ -49,7 +49,7 @@ public class NewPolyUtils {
     }
     private final static Poly convertToGpcjPolygon(Polygon2D polygon) {
     	PolyDefault result = new PolyDefault();
-    	for (LinearRing2D ring : polygon.getRings())
+    	for (LinearRing2D ring : polygon.boundary())
     		result.add(convertToGpcjSimplePolygon(ring));
     	return result;
     }
@@ -57,8 +57,8 @@ public class NewPolyUtils {
     private final static PolySimple convertToGpcjSimplePolygon(
     		LinearRing2D ring) {
     	PolySimple poly = new PolySimple();
-    	for (Point2D point : ring.getVertices())
-    		poly.add(new com.seisw.util.geom.Point2D(point.getX(), point.getY()));
+    	for (Point2D point : ring.vertices())
+    		poly.add(new com.seisw.util.geom.Point2D(point.x(), point.y()));
     	return poly;
     }
     
@@ -84,7 +84,7 @@ public class NewPolyUtils {
     	int n = poly.getNumPoints();
     	Point2D[] points = new Point2D[n];
     	for (int i = 0; i < n; i++)
-    		points[i] = Point2D.create(round(poly.getX(i)), round(poly.getY(i)));
+    		points[i] = new Point2D(round(poly.getX(i)), round(poly.getY(i)));
     	return points;
     }
     
@@ -94,7 +94,7 @@ public class NewPolyUtils {
     }
     
     private static double round(double value) {  
-        BigDecimal bd = new BigDecimal(value);  
+		BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(8, BigDecimal.ROUND_HALF_UP);  
         double d = bd.doubleValue();  
         bd = null;  

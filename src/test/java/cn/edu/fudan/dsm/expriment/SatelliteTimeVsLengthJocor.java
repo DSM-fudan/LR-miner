@@ -53,7 +53,7 @@ public class SatelliteTimeVsLengthJocor {
             PLARegionSearch plaRegionSearch = new PLARegionSearch(data);
             plaRegionSearch.errorBound = errorBound;
             for (int j = segs.size() - 1; j >= 0; j--) {
-                if (segs.get(j).getPolygonKB().getRings().size() > 1) {
+                if (segs.get(j).getPolygonKB().boundary().size() > 1) {
                     segs.remove(j);
                     System.out.println("Remove at " + j);
                 }

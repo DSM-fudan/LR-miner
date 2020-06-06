@@ -4,7 +4,7 @@ import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.MultiPolygon2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 
 import java.util.ArrayList;
@@ -51,8 +51,8 @@ public class PLAExtendDeepSearch4 {
             segment.index = i;
             segment.setDelete(false);
             //compute the segment's lowerBound
-            Point2D tempKB = segment.getPolygonKB().getCentroid();
-            int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segmentList.get(0).getLength());
+            Point2D tempKB = segment.getPolygonKB().centroid();
+            int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segmentList.get(0).getLength());
             segment.setLowerBound(lowerBound);
             if(maxLength <= lowerBound){
             	maxLength = lowerBound;
@@ -71,7 +71,7 @@ public class PLAExtendDeepSearch4 {
             PLASegment segment = segmentList.get(i);
             for (int j = i; j < segmentList.size(); j++) {
                 PLASegment plaSegment = segmentList.get(j);
-                if (Polygon2DUtils.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).getVertexNumber() > 0) {
+                if (Polygons2D.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).vertexNumber() > 0) {
                     matrix[i][j] = true;
                     matrix[j][i] = true;
                 }
@@ -123,8 +123,8 @@ public class PLAExtendDeepSearch4 {
                 	System.out.println("C = " + c + "!!!!!!!");
                 stack.add(nextSegment);
                 
-                Point2D tempKB = nextSegment.currentPolygon.getCentroid();
-                int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segmentList.get(0).getLength());               
+                Point2D tempKB = nextSegment.currentPolygon.centroid();
+                int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segmentList.get(0).getLength());               
                 if(lowerBound > maxLength){
                 	maxKB = tempKB;
                 	maxLength = lowerBound;
@@ -174,12 +174,12 @@ public class PLAExtendDeepSearch4 {
         	System.out.println("C = " + c + "!!!!!!!");
             
             if(maxKB != null){
-            	System.out.println("k = " + maxKB.getX());
-                System.out.println("b = " + maxKB.getY());
-                int realLength = SegmentUtils.verifyTrueLength(point2Ds, maxKB.getX(), maxKB.getY(), errorBound, segmentList.get(0).getLength());
+            	System.out.println("k = " + maxKB.x());
+                System.out.println("b = " + maxKB.y());
+                int realLength = SegmentUtils.verifyTrueLength(point2Ds, maxKB.x(), maxKB.y(), errorBound, segmentList.get(0).getLength());
                 System.out.println("RealLength with lowBound is " + realLength);
-                this.slope = maxKB.getX();
-                this.intercept = maxKB.getY();
+                this.slope = maxKB.x();
+                this.intercept = maxKB.y();
             }
         return maxLength;
     }
@@ -250,8 +250,8 @@ public class PLAExtendDeepSearch4 {
                 if (!matrix[topSegment.index][segment.index])
                     continue;
 
-            Polygon2D intersection = Polygon2DUtils.intersection(currentPolygon, segment.getPolygonKB());
-            if (intersection.getVertexNumber() > 0) {
+            Polygon2D intersection = Polygons2D.intersection(currentPolygon, segment.getPolygonKB());
+            if (intersection.vertexNumber() > 0) {
                 segment.currentPolygon = intersection;
                 return segment;
             }
@@ -271,12 +271,12 @@ public class PLAExtendDeepSearch4 {
             if(!matrix[curSeg.index][segment.index])
             	continue;
             try{
-            if (Polygon2DUtils.intersection(currentPolygon, segment.getPolygonKB()).getVertexNumber() > 0) {
+            if (Polygons2D.intersection(currentPolygon, segment.getPolygonKB()).vertexNumber() > 0) {
                 list.add(segment);
             }
             }catch(Exception ex){
             	Polygon2D curPoly = currentPolygon;
-            	int vetexNum = curPoly.getVertexNumber();
+            	int vetexNum = curPoly.vertexNumber();
             	if(curPoly instanceof MultiPolygon2D){
             		System.out.println("curPoly is instanceof MultiPoly2D");
             	}
@@ -285,10 +285,10 @@ public class PLAExtendDeepSearch4 {
             	}
             	System.out.println("vetex Num:" + vetexNum);
             	for(int k = 0; k < vetexNum; k++){
-            		System.out.println("X=" + curPoly.getVertex(k).getX() + "   Y=" +curPoly.getVertex(k).getY());
+            		System.out.println("X=" + curPoly.vertex(k).x() + "   Y=" +curPoly.vertex(k).y());
             	}
             	System.out.println("******************");
-            	vetexNum = segment.getPolygonKB().getVertexNumber();
+            	vetexNum = segment.getPolygonKB().vertexNumber();
             	Polygon2D segPoly = segment.getPolygonKB();
             	if(segPoly instanceof MultiPolygon2D){
             		System.out.println("segPoly is instanceof MultiPoly2D");
@@ -298,7 +298,7 @@ public class PLAExtendDeepSearch4 {
             	}
             	System.out.println("vetex Num2:" + vetexNum);
             	for(int k = 0; k < vetexNum; k++){
-            		System.out.println("X=" + segPoly.getVertex(k).getX() + "   Y=" +segPoly.getVertex(k).getY());
+            		System.out.println("X=" + segPoly.vertex(k).x() + "   Y=" +segPoly.vertex(k).y());
             	}
             	System.out.println("Exception when" + stack.size());
             }

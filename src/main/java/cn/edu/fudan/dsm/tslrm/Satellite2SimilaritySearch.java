@@ -53,6 +53,8 @@ public class Satellite2SimilaritySearch {
         } else if (subSystem == 8) {  // 能源
             sss.searchAllWithPointBasedOpti(subSystem, startPart, endPart, 25, 50000, errorBound, error, true);
         }
+
+        scanner.close();
     }
 
     private void searchAllWithPointBasedOpti(int subSystem, int startPart, int endPart, int numColumns, int length, double errorBound, double error, boolean z_normalization) throws IOException {
@@ -78,7 +80,7 @@ public class Satellite2SimilaritySearch {
 
                     PrintWriter print2 = new PrintWriter(new File("data/satellite2/" + subSystem + "_" + columnA + "_" + columnB + "_" + offset + "_" + data.length +"_data.csv"));
                     for (Point2D aData : data) {
-                        print2.println(aData.getX() + "," + aData.getY());
+                        print2.println(aData.x() + "," + aData.y());
                     }
                     print2.close();
 
@@ -91,15 +93,15 @@ public class Satellite2SimilaritySearch {
                     PLARegionSearch plaRegionSearch = new PLARegionSearch(data);
                     plaRegionSearch.errorBound = errorBound;
                     for (int j = segs.size() - 1; j >= 0; j--) {
-                        if (segs.get(j).getPolygonKB().getRings().size() > 1) {
+                        if (segs.get(j).getPolygonKB().boundary().size() > 1) {
                             segs.remove(j);
                             System.out.println("Remove at " + j);
                         }
                     }
 
                     Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
-                    double k = point2Ds1.getX();
-                    double b = point2Ds1.getY();
+                    double k = point2Ds1.x();
+                    double b = point2Ds1.y();
 
                     //print 0-1 file
                     printResultFile("data/satellite2/" + subSystem + "_" + columnA + "_" + columnB + "_" + data.length + "_segment.csv", data, k, b, errorBound);
@@ -140,8 +142,8 @@ public class Satellite2SimilaritySearch {
         int consecutiveNum = 0;
         PrintWriter pw = new PrintWriter(new FileWriter(outFile));
         for (Point2D point : points) {
-            double x = point.getX();
-            double y = point.getY();
+            double x = point.x();
+            double y = point.y();
             double estimateY = k * x + b;
             if (Math.abs(estimateY - y) < errorBound) {
                 consecutiveNum++;
@@ -178,8 +180,8 @@ public class Satellite2SimilaritySearch {
         double[] x = new double[data.length];
         double[] y = new double[data.length];
         for (int i = 0; i < data.length; i++) {
-            x[i] = data[i].getX();
-            y[i] = data[i].getY();
+            x[i] = data[i].x();
+            y[i] = data[i].y();
         }
         return new PearsonsCorrelation().correlation(x, y);
     }

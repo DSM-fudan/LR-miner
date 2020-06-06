@@ -3,7 +3,7 @@ package cn.edu.fudan.dsm.tslrm.data;
 import cn.edu.fudan.dsm.tslrm.PLASegment;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 
 import java.util.*;
 
@@ -73,7 +73,7 @@ public class SegmentUtils {
                 if (nextSegment.getStart() <= (segment.getEnd())) {
                     segment.setEnd(nextSegment.getEnd());
                     segment.setLength(segment.getLength() + (nextSegment.getEnd()-segment.getEnd()));
-                    segment.setPolygonKB(Polygon2DUtils.intersection(segment.getPolygonKB(), nextSegment.getPolygonKB()));
+                    segment.setPolygonKB(Polygons2D.intersection(segment.getPolygonKB(), nextSegment.getPolygonKB()));
                 } else {
                     ret.add(segment);
                     segment = new PLASegment();
@@ -97,8 +97,8 @@ public class SegmentUtils {
         int start = -1;
         int end = -1;
         for (int i = 0; i < point2Ds.length; i++) {
-            double x = point2Ds[i].getX();
-            double y = point2Ds[i].getY();
+            double x = point2Ds[i].x();
+            double y = point2Ds[i].y();
             double estimate_y = k * x + b;
             if (Math.abs(estimate_y - y) <= errorBound)
             {
@@ -139,8 +139,8 @@ public class SegmentUtils {
         int start = -1;
         int end = -1;
         for (int i = 0; i < point2Ds.length; i++) {
-            double x = point2Ds[i].getX();
-            double y = point2Ds[i].getY();
+            double x = point2Ds[i].x();
+            double y = point2Ds[i].y();
             double estimate_y = k * x + b;
             if (Math.abs(estimate_y - y) <= errorBound)
             {
@@ -226,8 +226,8 @@ public class SegmentUtils {
         int start = -1;
         int end = -1;
         for (int i = 0; i < point2Ds.length; i++) {
-            double x = point2Ds[i].getX();
-            double y = point2Ds[i].getY();
+            double x = point2Ds[i].x();
+            double y = point2Ds[i].y();
             double estimate_y = k * x + b;
             if ((Math.abs(estimate_y - y) <= errorBound) && (includeInSegmentList(segmentList,i)))       //add SegmentList check to support multi linear model detected
             {

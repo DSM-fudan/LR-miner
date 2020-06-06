@@ -8,7 +8,7 @@ import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.MultiPolygon2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 
 public class EnumeratePolygonSearch {
 	
@@ -41,13 +41,13 @@ public class EnumeratePolygonSearch {
     		while(j < possiblePolyLength){
     			IntersectPolyInfo curPolyInfo = possiblePolys.get(j);
     			if(curPolyInfo.getUpBound() > maxLength){
-    				Polygon2D intersectPolygon2D = Polygon2DUtils.intersection(curPolyInfo.getPoly(), proPoly);
+    				Polygon2D intersectPolygon2D = Polygons2D.intersection(curPolyInfo.getPoly(), proPoly);
     				if(intersectPolygon2D instanceof MultiPolygon2D){
 //    					System.out.println("Multiple2D !!!!!!!!");
     					j++;
     					continue;
     				}
-    				if(intersectPolygon2D.getVertexNumber() > 0){
+    				if(intersectPolygon2D.vertexNumber() > 0){
         				IntersectPolyInfo tempPolyInfo = new IntersectPolyInfo();
         				tempPolyInfo.setPoly(intersectPolygon2D);
         				tempPolyInfo.setEnd(proSeg.getEnd());
@@ -73,12 +73,12 @@ public class EnumeratePolygonSearch {
         				}
         				if(upBound > maxLength){
         					// to get the lowerBound of the new Polygon
-            				Point2D tempKB = intersectPolygon2D.getCentroid();
-            				int lowBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segmentList.get(0).getLength());
+            				Point2D tempKB = intersectPolygon2D.centroid();
+            				int lowBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segmentList.get(0).getLength());
             				if(lowBound > maxLength){
             					maxLength = lowBound;
-            					maxK = tempKB.getX();
-            					maxB = tempKB.getY();
+            					maxK = tempKB.x();
+            					maxB = tempKB.y();
             				}
             				if(lowBound < upBound){
             					possiblePolys.add(tempPolyInfo);
@@ -128,7 +128,7 @@ public class EnumeratePolygonSearch {
     	int end = polyInfo.getEnd();
     	for(int i = startId; i < segmentList.size(); i++){
     		PLASegment curSeg = segmentList.get(i);
-    		if(Polygon2DUtils.intersection(polyInfo.getPoly(), curSeg.getPolygonKB()).getVertexNumber() > 0){
+    		if(Polygons2D.intersection(polyInfo.getPoly(), curSeg.getPolygonKB()).vertexNumber() > 0){
     			if(end < curSeg.getStart()){
     				upBound += curSeg.getLength();
     			}else{

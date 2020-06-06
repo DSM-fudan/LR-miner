@@ -107,7 +107,7 @@ public class TemMining {
 			        plaRegionSearch.errorBound = errorBound;
 			        
 			        for(int j = segs.size() - 1; j >= 0; j--){
-			          	if(segs.get(j).getPolygonKB().getRings().size() > 1){
+			          	if(segs.get(j).getPolygonKB().boundary().size() > 1){
 			          		segs.remove(j);
 			          		System.out.println("Remove at " + j);
 			          	}
@@ -115,8 +115,8 @@ public class TemMining {
 			        
 			        Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
 			        descPW.println("Correlate StationInfo:");
-			        double k = point2Ds1.getX();
-			        double b = point2Ds1.getY();
+			        double k = point2Ds1.x();
+			        double b = point2Ds1.y();
 			        descPW.println("FileNum = " + lineNum + " StationID: " + sInfo[0] + " TypeID: " + sType[i] + " k = " + k + " b = " + b
 			        		+ " RealLength = " + plaRegionSearch.finalLength + " Upbound = " + plaRegionSearch.maxUpBound);
 			        descPW.println("*******************************");
@@ -127,8 +127,8 @@ public class TemMining {
 			        PrintWriter resultPW = new PrintWriter(new FileWriter(tempResultFile));
 			        int length = point2Ds.length;			        			       
 			        for(int j = 0; j < length; j++){
-			        	double estimateY = k * point2Ds[j].getX() + b;
-						if(Math.abs(estimateY - point2Ds[j].getY()) < errorBound){
+			        	double estimateY = k * point2Ds[j].x() + b;
+						if(Math.abs(estimateY - point2Ds[j].y()) < errorBound){
 							resultPW.println("1");						
 						}else{
 							resultPW.println("0");
@@ -243,15 +243,15 @@ public class TemMining {
 	        plaRegionSearch.errorBound = errorBound;
 	        
 	        for(int j = segs.size() - 1; j >= 0; j--){
-	          	if(segs.get(j).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(j).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(j);
 	          		System.out.println("Remove at " + j);
 	          	}
 	          }
 	        
 	        Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
-	        double k = point2Ds1.getX();
-	        double b = point2Ds1.getY();
+	        double k = point2Ds1.x();
+	        double b = point2Ds1.y();
 	        String corrType = stationToType.get(sInfo[0]);
 			String corrWDu = stationToWDu.get(sInfo[0]);
 			String corrJDu = stationToJDu.get(sInfo[0]);
@@ -333,15 +333,15 @@ public class TemMining {
 	        plaRegionSearch.errorBound = errorBound;
 	        
 	        for(int j = segs.size() - 1; j >= 0; j--){
-	          	if(segs.get(j).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(j).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(j);
 	          		System.out.println("Remove at " + j);
 	          	}
 	          }
 	        
 	        Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
-	        double k = point2Ds1.getX();
-	        double b = point2Ds1.getY();
+	        double k = point2Ds1.x();
+	        double b = point2Ds1.y();
 	        String corrInfo = "" + lineNum + "\t" + sInfo[0] + "\t" + k + "\t" + b + "\t" + plaRegionSearch.finalLength + "\t" 
 	        					+ plaRegionSearch.maxUpBound + "\t" + stationToCorr.get(sInfo[0]);
 	        descPW.println(corrInfo);
@@ -361,8 +361,8 @@ public class TemMining {
 		int consectiveNum = 0;
 		PrintWriter pw = new PrintWriter(new FileWriter(outFile));
 		for(int i = 0; i < points.length; i++){
-			double x = points[i].getX();
-			double y = points[i].getY();
+			double x = points[i].x();
+			double y = points[i].y();
 			double estimateY = k * x + b;
 			if(Math.abs(estimateY - y) < errorBound){
 				consectiveNum ++;						

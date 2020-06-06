@@ -152,7 +152,7 @@ public class ForexDataReginSearchTest {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < point2Ds.length; i++) {
             Point2D point2D = point2Ds[i];
-            sb.append(point2D.getX()).append(" ").append(point2D.getY()).append("\n");
+            sb.append(point2D.x()).append(" ").append(point2D.y()).append("\n");
         }
 
         return sb.toString();
@@ -178,7 +178,7 @@ public class ForexDataReginSearchTest {
         plaRegionSearch.errorBound = errorBound;
 
         for(int i = segs.size() - 1; i >= 0; i--){
-            if(segs.get(i).getPolygonKB().getRings().size() > 1){
+            if(segs.get(i).getPolygonKB().boundary().size() > 1){
                 segs.remove(i);
                 logger.debug("Remove at " + i);
             }
@@ -189,8 +189,8 @@ public class ForexDataReginSearchTest {
         Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, accuracy);
         stopWatch2.stop();
 
-        logger.debug("point2Ds1.getX() = " + point2Ds1.getX());
-        logger.debug("point2Ds1.getY() = " + point2Ds1.getY());
+        logger.debug("point2Ds1.getX() = " + point2Ds1.x());
+        logger.debug("point2Ds1.getY() = " + point2Ds1.y());
         logger.debug("PartitionNum = " + plaRegionSearch.partitionNum);
         logger.debug("RealLength = " + plaRegionSearch.finalLength);
         logger.debug("CountInsides = " + plaRegionSearch.countInsides);

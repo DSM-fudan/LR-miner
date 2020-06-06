@@ -4,8 +4,7 @@ import java.util.*;
 
 import math.geom2d.Box2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
-
+import math.geom2d.polygon.Polygons2D;
 import cn.edu.fudan.dsm.tslrm.PLASegment;
 
 /**
@@ -129,7 +128,7 @@ public class RTree {
     	for(int i = 0; i < length; i++){
     		PLASegment tempSeg = segmentList.get(i);
     		Polygon2D tempPoly = tempSeg.getPolygonKB();
-    		Box2D box = tempPoly.getBoundingBox();
+    		Box2D box = tempPoly.boundingBox();
     		Point p1 = new Point(new double[]{box.getMinX(), box.getMinY(), i});
     		Point p2 = new Point(new double[]{box.getMaxX(), box.getMaxY(), i});
     		HyperCube h = new HyperCube(p1, p2);
@@ -481,7 +480,7 @@ public class RTree {
     		matrix[i][i] = true;
     		PLASegment curSegment = segmentList.get(i);
     		Polygon2D probePoly = curSegment.getPolygonKB();
-  		  	Box2D box = probePoly.getBoundingBox();
+  		  	Box2D box = probePoly.boundingBox();
   		  	Point p1 = new Point(new double[]{box.getMinX(), box.getMinY(), -Double.MAX_VALUE});
   		  	Point p2 = new Point(new double[]{box.getMaxX(), box.getMaxY(), Double.MAX_VALUE});
   		  	HyperCube h = new HyperCube(p1, p2);
@@ -496,8 +495,8 @@ public class RTree {
     				if(n.branches[i] > start && n.data[i].intersection(h)){
     					PLASegment tempSeg = segmentList.get(n.branches[i]);
     					Polygon2D tempPoly = tempSeg.getPolygonKB();
-    					Polygon2D intersection = Polygon2DUtils.intersection(probePoly, tempPoly);
-    					 if(intersection.getVertexNumber() > 0){
+    					Polygon2D intersection = Polygons2D.intersection(probePoly, tempPoly);
+    					 if(intersection.vertexNumber() > 0){
     						  matrix[start][tempSeg.idx] = true;
     						  matrix[tempSeg.idx][start] = true;
     					  }
@@ -517,7 +516,7 @@ public class RTree {
     public int calUpperBound(PLASegment probeSeg, int currentIdx){
     	this.currentSeg = probeSeg;
   	  	this.currentPoly = probeSeg.getPolygonKB();
-  	  	Box2D box = currentPoly.getBoundingBox();
+  	  	Box2D box = currentPoly.boundingBox();
   	  	Point p1 = new Point(new double[] {box.getMinX(), box.getMinY(), currentIdx});
   	  	Point p2 = new Point(new double[] {box.getMaxX(), box.getMaxY(), Double.MAX_VALUE});
   	  	HyperCube h = new HyperCube(p1, p2);
@@ -532,8 +531,8 @@ public class RTree {
     			if(n.data[i].intersection(h)){
     				PLASegment tempSeg = segmentList.get(n.branches[i]);
     				Polygon2D tempPoly = tempSeg.getPolygonKB();
-    				Polygon2D intersection = Polygon2DUtils.intersection(this.currentPoly, tempPoly);
-    				if(intersection.getVertexNumber() > 0){
+    				Polygon2D intersection = Polygons2D.intersection(this.currentPoly, tempPoly);
+    				if(intersection.vertexNumber() > 0){
 				 		if (tempSeg.getStart() > currentSeg.getEnd()) {
 				 			upperBound += tempSeg.getLength();
 			            }else{

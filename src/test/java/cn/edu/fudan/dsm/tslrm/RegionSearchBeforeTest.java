@@ -54,9 +54,9 @@ public class RegionSearchBeforeTest {
         Point2D point2Ds1 = plaRegionSearch.searchByBox2D(segmentList, 0.05);
         time = System.currentTimeMillis() - time;
         System.out.println("Region Search Time = " + time);
-        System.out.println("point2Ds1.getX() = " + point2Ds1.getX());
-        System.out.println("point2Ds1.getY() = " + point2Ds1.getY());
-        int realLength = SegmentUtils.verifyTrueLength(point2Ds, point2Ds1.getX(), point2Ds1.getY(), errorBound, 3);
+        System.out.println("point2Ds1.getX() = " + point2Ds1.x());
+        System.out.println("point2Ds1.getY() = " + point2Ds1.y());
+        int realLength = SegmentUtils.verifyTrueLength(point2Ds, point2Ds1.x(), point2Ds1.y(), errorBound, 3);
         System.out.println("RealLength = " + realLength);
 //        plaRegionSearch.search()
 //
@@ -117,9 +117,9 @@ public class RegionSearchBeforeTest {
             Point2D point2Ds1 = plaRegionSearch.searchByBox2D(segmentList, 0.05);
             time2 = System.currentTimeMillis() - time2;
             System.out.println("Region Search Time = " + time2);
-            System.out.println("point2Ds1.getX() = " + point2Ds1.getX());
-            System.out.println("point2Ds1.getY() = " + point2Ds1.getY());
-            int realLength = SegmentUtils.verifyTrueLength(point2Ds, point2Ds1.getX(), point2Ds1.getY(), errorBound, 3);
+            System.out.println("point2Ds1.getX() = " + point2Ds1.x());
+            System.out.println("point2Ds1.getY() = " + point2Ds1.y());
+            int realLength = SegmentUtils.verifyTrueLength(point2Ds, point2Ds1.x(), point2Ds1.y(), errorBound, 3);
             System.out.println("RealLength = " + realLength);
             
             line1 += " " + length;

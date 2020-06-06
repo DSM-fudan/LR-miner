@@ -8,8 +8,6 @@ import java.util.List;
 
 import math.geom2d.Point2D;
 
-import org.apache.commons.lang.time.StopWatch;
-
 import cn.edu.fudan.dsm.tslrm.PLARegionSearch;
 import cn.edu.fudan.dsm.tslrm.PLASegment;
 import cn.edu.fudan.dsm.tslrm.RegionSearchBefore;
@@ -35,7 +33,7 @@ public class RealLengthVsSegmentLengthExperiment {
 	          plaRegionSearch.errorBound = errorBound;
 	          
 	          for(int i = segs.size() - 1; i >= 0; i--){
-	          	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(i).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(i);
 	          		System.out.println("Remove at " + i);
 	          	}
@@ -72,7 +70,7 @@ public class RealLengthVsSegmentLengthExperiment {
 	          plaRegionSearch.errorBound = errorBound;
 	          
 	          for(int i = segs.size() - 1; i >= 0; i--){
-	          	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(i).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(i);
 	          		System.out.println("Remove at " + i);
 	          	}
@@ -110,7 +108,7 @@ public class RealLengthVsSegmentLengthExperiment {
 	          plaRegionSearch.errorBound = errorBound;
 	          
 	          for(int i = segs.size() - 1; i >= 0; i--){
-	          	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(i).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(i);
 	          		System.out.println("Remove at " + i);
 	          	}

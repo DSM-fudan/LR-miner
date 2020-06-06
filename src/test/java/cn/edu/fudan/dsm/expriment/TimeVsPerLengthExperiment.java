@@ -34,7 +34,7 @@ public class TimeVsPerLengthExperiment {
         plaRegionSearch.errorBound = errorBound;
         
         for(int i = segs.size() - 1; i >= 0; i--){
-        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
         		segs.remove(i);
         		System.out.println("Remove at " + i);
         	}
@@ -63,7 +63,7 @@ public class TimeVsPerLengthExperiment {
         plaRegionSearch.errorBound = errorBound;
         
         for(int i = segs.size() - 1; i >= 0; i--){
-        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
         		segs.remove(i);
         		System.out.println("Remove at " + i);
         	}
@@ -93,7 +93,7 @@ public class TimeVsPerLengthExperiment {
         plaRegionSearch.errorBound = errorBound;
         
         for(int i = segs.size() - 1; i >= 0; i--){
-        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
         		segs.remove(i);
         		System.out.println("Remove at " + i);
         	}

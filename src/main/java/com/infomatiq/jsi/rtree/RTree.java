@@ -30,7 +30,7 @@ import java.util.Properties;
 
 import math.geom2d.Box2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 
 import org.apache.log4j.Logger;
 
@@ -216,7 +216,7 @@ public class RTree implements SpatialIndex {
 	  for(int i = 0; i < length; i++){
 		  PLASegment tempSeg = segmentList.get(i);
 		  Polygon2D tempPoly = tempSeg.getPolygonKB();
-		  Box2D box = tempPoly.getBoundingBox();
+		  Box2D box = tempPoly.boundingBox();
 		  Rectangle rect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
 		  this.add(rect, i);
 	  }
@@ -577,7 +577,7 @@ public class RTree implements SpatialIndex {
   public int calUpperBound(PLASegment probeSeg, int currentIdx){
 	  this.currentSeg = probeSeg;
 	  this.currentPoly = probeSeg.currentPolygon;
-	  Box2D box = currentPoly.getBoundingBox();
+	  Box2D box = currentPoly.boundingBox();
 	  Node rootNode = getNode(rootNodeId);
 	  Rectangle probeRect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
 	  return intersects(probeRect, rootNode, currentIdx);
@@ -586,7 +586,7 @@ public class RTree implements SpatialIndex {
   public List<PLASegment> calUpBound(Polygon2D currentPoly){
 	  List<PLASegment> segments = new ArrayList<PLASegment>();
 	  this.currentPoly = currentPoly;
-	  Box2D box = currentPoly.getBoundingBox();
+	  Box2D box = currentPoly.boundingBox();
 	  Node rootNode = getNode(rootNodeId);
 	  Rectangle probeRect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
 	  intersects(probeRect, rootNode, segments);
@@ -599,8 +599,8 @@ public class RTree implements SpatialIndex {
 			  PLASegment tempSeg = segmentList.get(n.ids[i]);
 			  if(Rectangle.intersects(r.minX, r.minY, r.maxX, r.maxY, n.entriesMinX[i], n.entriesMinY[i], n.entriesMaxX[i], n.entriesMaxY[i])){
 				  Polygon2D tempPoly = tempSeg.getPolygonKB();
-				  Polygon2D intersection = Polygon2DUtils.intersection(tempPoly, this.currentPoly);
-				  if(intersection.getVertexNumber() > 0){
+				  Polygon2D intersection = Polygons2D.intersection(tempPoly, this.currentPoly);
+				  if(intersection.vertexNumber() > 0){
 					  segments.add(tempSeg);
 				  }
 			  }
@@ -618,7 +618,7 @@ public class RTree implements SpatialIndex {
   public int initCalUpperBound(PLASegment probeSeg){
 	  this.currentSeg = probeSeg;
 	  this.currentPoly = probeSeg.getPolygonKB();
-	  Box2D box = currentPoly.getBoundingBox();
+	  Box2D box = currentPoly.boundingBox();
 	  Node rootNode = getNode(rootNodeId);
 	  Rectangle probeRect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
 	  return intersects(probeRect, rootNode);
@@ -632,8 +632,8 @@ public class RTree implements SpatialIndex {
 			 if((tempSeg.idx > currentIdx) && 
 					 Rectangle.intersects(r.minX, r.minY, r.maxX, r.maxY, n.entriesMinX[i], n.entriesMinY[i], n.entriesMaxX[i], n.entriesMaxY[i])){
 				 	Polygon2D tempPoly = tempSeg.getPolygonKB();
-				 	Polygon2D intersection = Polygon2DUtils.intersection(this.currentPoly, tempPoly);
-				 	if(intersection.getVertexNumber() > 0){
+				 	Polygon2D intersection = Polygons2D.intersection(this.currentPoly, tempPoly);
+				 	if(intersection.vertexNumber() > 0){
 				 		if (tempSeg.getStart() > currentSeg.getEnd()) {
 				 			upperBound += tempSeg.getLength();
 			            }else{
@@ -661,8 +661,8 @@ public class RTree implements SpatialIndex {
 			  PLASegment tempSeg = segmentList.get(n.ids[i]);
 			  if(Rectangle.intersects(r.minX, r.minY, r.maxX, r.maxY, n.entriesMinX[i], n.entriesMinY[i], n.entriesMaxX[i], n.entriesMaxY[i])){
 				  Polygon2D tempPoly = tempSeg.getPolygonKB();
-				 	Polygon2D intersection = Polygon2DUtils.intersection(this.currentPoly, tempPoly);
-				 	if(intersection.getVertexNumber() > 0){
+				 	Polygon2D intersection = Polygons2D.intersection(this.currentPoly, tempPoly);
+				 	if(intersection.vertexNumber() > 0){
 				 		if ((tempSeg.getStart() > currentSeg.getEnd()) && (tempSeg.getEnd() < currentSeg.getStart())) {
 				 			upperBound += tempSeg.getLength();
 			            }else{
@@ -691,7 +691,7 @@ public class RTree implements SpatialIndex {
 		  matrix[i][i] = true;
 		  PLASegment probeSegment = segmentList.get(i);
 		  Polygon2D probePoly = probeSegment.getPolygonKB();
-		  Box2D box = probePoly.getBoundingBox();
+		  Box2D box = probePoly.boundingBox();
 		  Rectangle probeRect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
 		  Node rootNode = getNode(rootNodeId);
 		  intersects(probeRect, probePoly, matrix, rootNode, i);
@@ -704,7 +704,7 @@ public class RTree implements SpatialIndex {
 		  matrix[i][i] = true;
 		  PLASegment probeSegment = segmentList.get(i);
 		  Polygon2D probePoly = probeSegment.getPolygonKB();
-		  Box2D box = probePoly.getBoundingBox();
+		  Box2D box = probePoly.boundingBox();
 		  Rectangle probeRect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
 		  Node rootNode = getNode(rootNodeId);
 		  intersects2(probeRect, probePoly, matrix, rootNode, i);
@@ -1219,8 +1219,8 @@ public class RTree implements SpatialIndex {
 			  if((tempSeg.idx > start) && 
 					  Rectangle.intersects(r.minX, r.minY, r.maxX, r.maxY, n.entriesMinX[i], n.entriesMinY[i], n.entriesMaxX[i], n.entriesMaxY[i])){
 				  Polygon2D tempPoly = tempSeg.getPolygonKB();
-				  Polygon2D intersection = Polygon2DUtils.intersection(currentPoly, tempPoly);
-				  if(intersection.getVertexNumber() > 0){
+				  Polygon2D intersection = Polygons2D.intersection(currentPoly, tempPoly);
+				  if(intersection.vertexNumber() > 0){
 					  matrix[start][tempSeg.idx] = true;
 					  matrix[tempSeg.idx][start] = true;
 				  }
@@ -1243,8 +1243,8 @@ public class RTree implements SpatialIndex {
 			  if((tempSeg.index > start) && 
 					  Rectangle.intersects(r.minX, r.minY, r.maxX, r.maxY, n.entriesMinX[i], n.entriesMinY[i], n.entriesMaxX[i], n.entriesMaxY[i])){
 				  Polygon2D tempPoly = tempSeg.getPolygonKB();
-				  Polygon2D intersection = Polygon2DUtils.intersection(currentPoly, tempPoly);
-				  if(intersection.getVertexNumber() > 0){
+				  Polygon2D intersection = Polygons2D.intersection(currentPoly, tempPoly);
+				  if(intersection.vertexNumber() > 0){
 					  matrix[start][tempSeg.index] = true;
 					  matrix[tempSeg.index][start] = true;
 				  }

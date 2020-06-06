@@ -1,14 +1,11 @@
 package cn.edu.fudan.dsm.tslrm;
 
-import cn.edu.fudan.dsm.tslrm.data.ClimateDATAUtils;
 import cn.edu.fudan.dsm.tslrm.data.DataGenerator;
 import math.geom2d.Point2D;
-import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -42,14 +39,14 @@ public class RegionSearchTestWithOneLinearModel {
         int[] values = new int[10];
         for (int i = 0; i < segs.size(); i++) {
             PLASegment plaSegment = segs.get(i);
-            values[plaSegment.getPolygonKB().getVertexNumber()]++;
+            values[plaSegment.getPolygonKB().vertexNumber()]++;
         }
 
         PLARegionSearch plaRegionSearch = new PLARegionSearch(point2Ds);
         plaRegionSearch.errorBound = errorBound;
 
         for(int i = segs.size() - 1; i >= 0; i--){
-            if(segs.get(i).getPolygonKB().getRings().size() > 1){
+            if(segs.get(i).getPolygonKB().boundary().size() > 1){
                 segs.remove(i);
                 logger.debug("Remove at " + i);
             }
@@ -60,8 +57,8 @@ public class RegionSearchTestWithOneLinearModel {
         Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
         stopWatch2.stop();
 
-        logger.debug("point2Ds1.getX() = " + point2Ds1.getX());
-        logger.debug("point2Ds1.getY() = " + point2Ds1.getY());
+        logger.debug("point2Ds1.getX() = " + point2Ds1.x());
+        logger.debug("point2Ds1.getY() = " + point2Ds1.y());
         logger.debug("PartitionNum = " + plaRegionSearch.partitionNum);
         logger.debug("RealLength = " + plaRegionSearch.finalLength);
         logger.debug("CountInsides = " + plaRegionSearch.countInsides);
@@ -92,14 +89,14 @@ public class RegionSearchTestWithOneLinearModel {
         int[] values = new int[10];
         for (int i = 0; i < segs.size(); i++) {
             PLASegment plaSegment = segs.get(i);
-            values[plaSegment.getPolygonKB().getVertexNumber()]++;
+            values[plaSegment.getPolygonKB().vertexNumber()]++;
         }
 
         PLARegionSearch plaRegionSearch = new PLARegionSearch(point2Ds);
         plaRegionSearch.errorBound = errorBound;
 
         for(int i = segs.size() - 1; i >= 0; i--){
-            if(segs.get(i).getPolygonKB().getRings().size() > 1){
+            if(segs.get(i).getPolygonKB().boundary().size() > 1){
                 segs.remove(i);
                 logger.debug("Remove at " + i);
             }
@@ -110,8 +107,8 @@ public class RegionSearchTestWithOneLinearModel {
         Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
         stopWatch2.stop();
 
-        logger.debug("point2Ds1.getX() = " + point2Ds1.getX());
-        logger.debug("point2Ds1.getY() = " + point2Ds1.getY());
+        logger.debug("point2Ds1.getX() = " + point2Ds1.x());
+        logger.debug("point2Ds1.getY() = " + point2Ds1.y());
         logger.debug("PartitionNum = " + plaRegionSearch.partitionNum);
         logger.debug("RealLength = " + plaRegionSearch.finalLength);
         logger.debug("CountInsides = " + plaRegionSearch.countInsides);

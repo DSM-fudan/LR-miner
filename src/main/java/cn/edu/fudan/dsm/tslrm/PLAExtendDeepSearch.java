@@ -3,7 +3,7 @@ package cn.edu.fudan.dsm.tslrm;
 import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class PLAExtendDeepSearch {
             for (int j = i; j < segmentList.size(); j++) {
                 PLASegment plaSegment = segmentList.get(j);
 
-                if (Polygon2DUtils.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).getVertexNumber() > 0) {
+                if (Polygons2D.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).vertexNumber() > 0) {
                     matrix[i][j] = true;
                     matrix[j][i] = true;
                 }
@@ -120,7 +120,7 @@ public class PLAExtendDeepSearch {
                 nextSegment.totalLength = currentLength;
 
                 if (currentLength > maxLength) {
-                    maxKB = stack.get(stack.size() - 1).currentPolygon.getCentroid();
+                    maxKB = stack.get(stack.size() - 1).currentPolygon.centroid();
                     minStackSize = segmentList.size();//to reset
                     maxLength = currentLength;
 //                    System.out.println("maxLength = " + maxLength);
@@ -212,11 +212,11 @@ public class PLAExtendDeepSearch {
                 PLASegment segment = maxList.get(i);
 //                System.out.println("segment = " + segment);
             }
-            System.out.println("k = " + maxKB.getX());
-            System.out.println("b = " + maxKB.getY());
+            System.out.println("k = " + maxKB.x());
+            System.out.println("b = " + maxKB.y());
 
-            this.slope = maxKB.getX();
-            this.intercept = maxKB.getY();
+            this.slope = maxKB.x();
+            this.intercept = maxKB.y();
 
             //verify the true maxLength
 //            maxLength = SegmentUtils.verifyTrueLength(segmentList,maxKB.getX(),maxKB.getY());
@@ -327,8 +327,8 @@ public class PLAExtendDeepSearch {
                 if (false == matrix[topSegment.idx][i])
                     continue;
 
-            Polygon2D intersection = Polygon2DUtils.intersection(currentPolygon, segment.getPolygonKB());
-            if (intersection.getVertexNumber() >= 0) {
+            Polygon2D intersection = Polygons2D.intersection(currentPolygon, segment.getPolygonKB());
+            if (intersection.vertexNumber() >= 0) {
                 segment.currentPolygon = intersection;
                 return segment;
             }
@@ -346,7 +346,7 @@ public class PLAExtendDeepSearch {
             }
 
             PLASegment segment = segmentList.get(i);
-            if (Polygon2DUtils.intersection(currentPolygon, segment.getPolygonKB()).getVertexNumber() > 0) {
+            if (Polygons2D.intersection(currentPolygon, segment.getPolygonKB()).vertexNumber() > 0) {
                 list.add(segment);
             }
         }

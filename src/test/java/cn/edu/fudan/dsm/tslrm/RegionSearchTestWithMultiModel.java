@@ -35,7 +35,7 @@ public class RegionSearchTestWithMultiModel {
         List<PLASegment> segs = miner.buildSpecificSegments(3);
         logger.debug("all segmentList.size() = " + segs.size());
         for (int i = segs.size() - 1; i >= 0; i--) {
-            if (segs.get(i).getPolygonKB().getRings().size() > 1) {
+            if (segs.get(i).getPolygonKB().boundary().size() > 1) {
                 segs.remove(i);
                 logger.debug("Remove at " + i);
             }
@@ -53,8 +53,8 @@ public class RegionSearchTestWithMultiModel {
             Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
             stopWatch2.stop();
 
-            logger.debug("point2Ds1.getX() = " + point2Ds1.getX());
-            logger.debug("point2Ds1.getY() = " + point2Ds1.getY());
+            logger.debug("point2Ds1.getX() = " + point2Ds1.x());
+            logger.debug("point2Ds1.getY() = " + point2Ds1.y());
             logger.debug("PartitionNum = " + plaRegionSearch.partitionNum);
             logger.debug("RealLength = " + plaRegionSearch.finalLength);
             logger.debug("CountInsides = " + plaRegionSearch.countInsides);
@@ -69,7 +69,7 @@ public class RegionSearchTestWithMultiModel {
                 logger.debug("try to find more model ...........................");
                 //remove match segment from list
                 for (int i = segs.size() - 1; i >= 0; i--) {
-                    if (segs.get(i).getPolygonKB().contains(point2Ds1.getX(),point2Ds1.getY())) {
+                    if (segs.get(i).getPolygonKB().contains(point2Ds1.x(),point2Ds1.y())) {
                         segs.remove(i);
 //                        logger.debug("Remove at " + i);
                     }

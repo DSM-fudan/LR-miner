@@ -33,7 +33,7 @@ public class TemTimeVsLength {
 	        List<PLASegment> segs = miner.buildSpecificSegments(3);
 	        
 	        for(int j = segs.size() - 1; j >= 0; j--){
-	          	if(segs.get(j).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(j).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(j);
 	          		System.out.println("Remove at " + j);
 	          	}
@@ -79,7 +79,7 @@ public class TemTimeVsLength {
 	        List<PLASegment> segs = miner.buildSpecificSegments(3);
 	        
 	        for(int j = segs.size() - 1; j >= 0; j--){
-	          	if(segs.get(j).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(j).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(j);
 	          		System.out.println("Remove at " + j);
 	          	}
@@ -128,7 +128,7 @@ public class TemTimeVsLength {
 	        plaRegionSearch.errorBound = errorBound;
 	        
 	        for(int j = segs.size() - 1; j >= 0; j--){
-	          	if(segs.get(j).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(j).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(j);
 	          		System.out.println("Remove at " + j);
 	          	}
@@ -149,7 +149,7 @@ public class TemTimeVsLength {
 	            line2 += tempTime + "\t";
 	        }
 	        
-	        System.out.println("k = " + point2Ds1.getX() + " b = " + point2Ds1.getY());
+	        System.out.println("k = " + point2Ds1.x() + " b = " + point2Ds1.y());
 	        System.out.println("RealLength = " + plaRegionSearch.finalLength);
 	    }
 	    pw.println(line1);
@@ -174,7 +174,7 @@ public class TemTimeVsLength {
 	        plaRegionSearch.errorBound = errorBound;
 	        
 	        for(int j = segs.size() - 1; j >= 0; j--){
-	          	if(segs.get(j).getPolygonKB().getRings().size() > 1){
+	          	if(segs.get(j).getPolygonKB().boundary().size() > 1){
 	          		segs.remove(j);
 	          		System.out.println("Remove at " + j);
 	          	}
@@ -195,7 +195,7 @@ public class TemTimeVsLength {
 	            line2 += tempTime + "\t";
 	        }
 	        
-	        System.out.println("k = " + point2Ds1.getX() + " b = " + point2Ds1.getY());
+	        System.out.println("k = " + point2Ds1.x() + " b = " + point2Ds1.y());
 	        System.out.println("RealLength = " + plaRegionSearch.finalLength);
 	    }
 	    pw.println(line1);

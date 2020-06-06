@@ -3,8 +3,6 @@ package cn.edu.fudan.dsm.tslrm;
 import cn.edu.fudan.dsm.tslrm.log.DefaultFileAppender;
 import junit.framework.Assert;
 import org.apache.log4j.*;
-import org.apache.log4j.helpers.DateLayout;
-import org.apache.log4j.spi.LoggingEvent;
 import org.junit.Test;
 
 import java.io.IOException;

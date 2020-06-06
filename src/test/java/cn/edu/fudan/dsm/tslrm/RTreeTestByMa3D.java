@@ -4,11 +4,9 @@ import java.io.File;
 import java.util.List;
 
 import org.junit.Test;
-import junit.framework.TestCase;
 
 import math.geom2d.Point2D;
-import math.geom2d.polygon.Polygon2DUtils;
-import rtree.CachedPersistentPageFile;
+import math.geom2d.polygon.Polygons2D;
 import rtree.MemoryPageFile;
 import rtree.RTree;
 import cn.edu.fudan.dsm.tslrm.data.DataGenerator;
@@ -50,7 +48,7 @@ public class RTreeTestByMa3D {
           for (int j = i; j < segmentList.size(); j++) {
               PLASegment plaSegment = segmentList.get(j);
 
-              if (Polygon2DUtils.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).getVertexNumber() > 0) {
+              if (Polygons2D.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).vertexNumber() > 0) {
                   matrix1[i][j] = true;
                   matrix1[j][i] = true;
               	}

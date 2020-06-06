@@ -5,7 +5,7 @@ import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 
 import java.io.File;
@@ -345,8 +345,8 @@ public class RegionSearchBefore {
         for (int i = 0; i < segmentList.size(); i++) {
             PLASegment segment = segmentList.get(i);
             Polygon2D p = new SimplePolygon2D(new double[]{box2D.getMinX(),box2D.getMaxX(),box2D.getMaxX(),box2D.getMinX()},new double[]{box2D.getMinY(),box2D.getMinY(),box2D.getMaxY(),box2D.getMaxY()});
-            Polygon2D intersection = Polygon2DUtils.intersection(p, segment.getPolygonKB());
-            if (intersection.getVertexNumber() > 0) {
+            Polygon2D intersection = Polygons2D.intersection(p, segment.getPolygonKB());
+            if (intersection.vertexNumber() > 0) {
                 list.add(segment);
             }
         }

@@ -2,7 +2,7 @@ package cn.edu.fudan.dsm.tslrm;
 
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 import org.apache.commons.math3.geometry.euclidean.oned.Interval;
 
@@ -88,9 +88,9 @@ public class PLAPointBoundMiner {
                 PLASegment seg = list.get(i);
 
                 Polygon2D segPolygonYM = seg.getPolygonYM();
-                Polygon2D intersection = Polygon2DUtils.intersection(removePolygon, segPolygonYM);
+                Polygon2D intersection = Polygons2D.intersection(removePolygon, segPolygonYM);
 
-                if (intersection.getVertexNumber() > 0) //has intersected
+                if (intersection.vertexNumber() > 0) //has intersected
                 {
                     PLASegment newSeg = new PLASegment();
 
@@ -134,17 +134,17 @@ public class PLAPointBoundMiner {
         PLASegment plaSegment = new PLASegment();
         plaSegment.setStart(i);
         plaSegment.setEnd(i);
-        plaSegment.setStartX(points[i].getX());
-        plaSegment.setStartY(points[i].getY());
+        plaSegment.setStartX(points[i].x());
+        plaSegment.setStartY(points[i].y());
         plaSegment.setPolygonYM(polygonYMOfPoint(points[i]));
 
         boolean verify = plaSegment.verify(points, pointErrorBound);
 
         while (j < points.length) {
             Polygon2D p1 = polygonYMOf2Points(points[i], points[j]);
-            Polygon2D p = Polygon2DUtils.intersection(plaSegment.getPolygonYM(), p1);
+            Polygon2D p = Polygons2D.intersection(plaSegment.getPolygonYM(), p1);
 
-            if (p.getVertexNumber() <= 0) //intersection is null
+            if (p.vertexNumber() <= 0) //intersection is null
             {
                 plaSegmentList.add(plaSegment);
 
@@ -153,8 +153,8 @@ public class PLAPointBoundMiner {
                 plaSegment = new PLASegment();
                 plaSegment.setStart(i);
                 plaSegment.setEnd(i);
-                plaSegment.setStartX(points[i].getX());
-                plaSegment.setStartY(points[i].getY());
+                plaSegment.setStartX(points[i].x());
+                plaSegment.setStartY(points[i].y());
                 plaSegment.setPolygonYM(polygonYMOfPoint(points[i]));
             } else {
                 plaSegment.setEnd(j);
@@ -176,16 +176,16 @@ public class PLAPointBoundMiner {
     public final double[] Y_INF = {D_MIN, D_MIN, D_MAX, D_MAX};
 
     private Polygon2D polygonYMOfPoint(Point2D point) {
-        double y[] = {point.getY() - pointErrorBound, point.getY() + pointErrorBound, point.getY() + pointErrorBound, point.getY() - pointErrorBound};
+        double y[] = {point.y() - pointErrorBound, point.y() + pointErrorBound, point.y() + pointErrorBound, point.y() - pointErrorBound};
         double m[] = Y_INF;
         return new SimplePolygon2D(y, m);
     }
 
     private Polygon2D polygonYMOf2Points(Point2D point1, Point2D point2) {
-        double x1 = point1.getX();
-        double y1 = point1.getY();
-        double x2 = point2.getX();
-        double y2 = point2.getY();
+        double x1 = point1.x();
+        double y1 = point1.y();
+        double x2 = point2.x();
+        double y2 = point2.y();
 
         double y[] = {y1 - pointErrorBound, y1 + pointErrorBound, y1 + pointErrorBound, y1 - pointErrorBound};
         if (x1 == x2) {

@@ -1,8 +1,6 @@
 package cn.edu.fudan.dsm.tslrm;
 
 import cn.edu.fudan.dsm.tslrm.data.ClimateDATAUtils;
-import cn.edu.fudan.dsm.tslrm.data.DataGenerator;
-import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Point2D;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
@@ -64,7 +62,7 @@ public class PLARegionSearchTest {
             plaRegionSearch.errorBound = errorBound;
             
             for(int i = segs.size() - 1; i >= 0; i--){
-            	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+            	if(segs.get(i).getPolygonKB().boundary().size() > 1){
             		segs.remove(i);
             		System.out.println("Remove at " + i);
             	}
@@ -80,8 +78,8 @@ public class PLARegionSearchTest {
             line3 += "\t" + stopWatch2.getTime();
             line4 += "\t" + plaRegionSearch.partitionNum;
             line5 += "\t" + plaRegionSearch.finalLength;
-            line6 += "\t" + point2Ds1.getX();
-            line7 += "\t" + point2Ds1.getY();
+            line6 += "\t" + point2Ds1.x();
+            line7 += "\t" + point2Ds1.y();
             line8 += "\t" + error;
             line9 += "\t" + errorBound;
             line10 += "\t" + plaRegionSearch.maxUpBound;
@@ -89,8 +87,8 @@ public class PLARegionSearchTest {
             
             System.out.println("stopWatch1.getTime() = " + stopWatch1.getTime());
             System.out.println("stopWatch2.getTime() = " + stopWatch2.getTime());
-            System.out.println("point2Ds1.getX() = " + point2Ds1.getX());
-            System.out.println("point2Ds1.getY() = " + point2Ds1.getY());
+            System.out.println("point2Ds1.getX() = " + point2Ds1.x());
+            System.out.println("point2Ds1.getY() = " + point2Ds1.y());
             System.out.println("PartitionNum = " + plaRegionSearch.partitionNum);
             System.out.println("RealLength = " + plaRegionSearch.finalLength);
         }
@@ -129,7 +127,7 @@ public class PLARegionSearchTest {
         plaRegionSearch.errorBound = errorBound;
         
         for(int i = segs.size() - 1; i >= 0; i--){
-        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
         		segs.remove(i);
         		System.out.println("Remove at " + i);
         	}
@@ -142,8 +140,8 @@ public class PLARegionSearchTest {
         
         System.out.println("stopWatch1.getTime() = " + stopWatch1.getTime());
         System.out.println("stopWatch2.getTime() = " + stopWatch2.getTime());
-        System.out.println("point2Ds1.getX() = " + point2Ds1.getX());
-        System.out.println("point2Ds1.getY() = " + point2Ds1.getY());
+        System.out.println("point2Ds1.getX() = " + point2Ds1.x());
+        System.out.println("point2Ds1.getY() = " + point2Ds1.y());
         System.out.println("PartitionNum = " + plaRegionSearch.partitionNum);
         System.out.println("RealLength = " + plaRegionSearch.finalLength);
         System.out.println("CountInsides = " + plaRegionSearch.countInsides);
@@ -174,7 +172,7 @@ public class PLARegionSearchTest {
         plaRegionSearch.errorBound = errorBound;
         
         for(int i = segs.size() - 1; i >= 0; i--){
-        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
         		segs.remove(i);
         		System.out.println("Remove at " + i);
         	}
@@ -194,8 +192,8 @@ public class PLARegionSearchTest {
         
         System.out.println("stopWatch1.getTime() = " + stopWatch1.getTime());
         System.out.println("stopWatch2.getTime() = " + stopWatch2.getTime());
-        System.out.println("point2Ds1.getX() = " + point2Ds1.getX());
-        System.out.println("point2Ds1.getY() = " + point2Ds1.getY());
+        System.out.println("point2Ds1.getX() = " + point2Ds1.x());
+        System.out.println("point2Ds1.getY() = " + point2Ds1.y());
         System.out.println("PartitionNum = " + plaRegionSearch.partitionNum);
         System.out.println("RealLength = " + plaRegionSearch.finalLength);
     }
@@ -223,7 +221,7 @@ public class PLARegionSearchTest {
         plaRegionSearch.errorBound = errorBound;
         
         for(int i = segs.size() - 1; i >= 0; i--){
-        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
         		segs.remove(i);
         		System.out.println("Remove at " + i);
         	}
@@ -236,8 +234,8 @@ public class PLARegionSearchTest {
         
         System.out.println("stopWatch1.getTime() = " + stopWatch1.getTime());
         System.out.println("stopWatch2.getTime() = " + stopWatch2.getTime());
-        System.out.println("point2Ds1.getX() = " + point2Ds1.getX());
-        System.out.println("point2Ds1.getY() = " + point2Ds1.getY());
+        System.out.println("point2Ds1.getX() = " + point2Ds1.x());
+        System.out.println("point2Ds1.getY() = " + point2Ds1.y());
         System.out.println("PartitionNum = " + plaRegionSearch.partitionNum);
         System.out.println("RealLength = " + plaRegionSearch.finalLength);
         

@@ -4,7 +4,7 @@ import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 
 import java.util.ArrayList;
@@ -66,8 +66,8 @@ public class PLAExtendDeepSearch6 {
             segment.idx = i;
             segment.setDelete(false);
             //compute the segment's lowerBound  using centroid
-            Point2D tempKB = segment.getPolygonKB().getCentroid();
-            int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segmentList.get(0).getLength());
+            Point2D tempKB = segment.getPolygonKB().centroid();
+            int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segmentList.get(0).getLength());
             segment.setLowerBound(lowerBound);
             if(maxLength <= lowerBound){
             	maxLength = lowerBound;
@@ -123,8 +123,8 @@ public class PLAExtendDeepSearch6 {
                 	System.out.println("C = " + c + "!!!!!!!");
                 stack.add(nextSegment);
                 
-                Point2D tempKB = nextSegment.currentPolygon.getCentroid();
-                int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segmentList.get(0).getLength());               
+                Point2D tempKB = nextSegment.currentPolygon.centroid();
+                int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segmentList.get(0).getLength());               
                 if(lowerBound > maxLength){
                 	maxKB = tempKB;
                 	maxLength = lowerBound;
@@ -180,12 +180,12 @@ public class PLAExtendDeepSearch6 {
         	System.out.println("C = " + c + "!!!!!!!");
             
             if(maxKB != null){
-            	System.out.println("k = " + maxKB.getX());
-                System.out.println("b = " + maxKB.getY());
-                int realLength = SegmentUtils.verifyTrueLength(point2Ds, maxKB.getX(), maxKB.getY(), errorBound, segmentList.get(0).getLength());
+            	System.out.println("k = " + maxKB.x());
+                System.out.println("b = " + maxKB.y());
+                int realLength = SegmentUtils.verifyTrueLength(point2Ds, maxKB.x(), maxKB.y(), errorBound, segmentList.get(0).getLength());
                 System.out.println("RealLength with lowBound is " + realLength);
-                this.slope = maxKB.getX();
-                this.intercept = maxKB.getY();
+                this.slope = maxKB.x();
+                this.intercept = maxKB.y();
             }
         return maxLength;
     }
@@ -217,8 +217,8 @@ public class PLAExtendDeepSearch6 {
             segment.idx = i;
             segment.setDelete(false);
             //compute the segment's lowerBound  using centroid
-            Point2D tempKB = segment.getPolygonKB().getCentroid();
-            int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segmentList.get(0).getLength());
+            Point2D tempKB = segment.getPolygonKB().centroid();
+            int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segmentList.get(0).getLength());
             segment.setLowerBound(lowerBound);
             if(maxLength <= lowerBound){
             	maxLength = lowerBound;
@@ -274,8 +274,8 @@ public class PLAExtendDeepSearch6 {
                 	System.out.println("C = " + c + "!!!!!!!");
                 stack.add(nextSegment);
                 
-                Point2D tempKB = nextSegment.currentPolygon.getCentroid();
-                int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.getX(), tempKB.getY(), errorBound, segmentList.get(0).getLength());               
+                Point2D tempKB = nextSegment.currentPolygon.centroid();
+                int lowerBound = SegmentUtils.verifyTrueLength(point2Ds, tempKB.x(), tempKB.y(), errorBound, segmentList.get(0).getLength());               
                 if(lowerBound > maxLength){
                 	maxKB = tempKB;
                 	maxLength = lowerBound;
@@ -331,12 +331,12 @@ public class PLAExtendDeepSearch6 {
         	System.out.println("C = " + c + "!!!!!!!");
             
             if(maxKB != null){
-            	System.out.println("k = " + maxKB.getX());
-                System.out.println("b = " + maxKB.getY());
-                int realLength = SegmentUtils.verifyTrueLength(point2Ds, maxKB.getX(), maxKB.getY(), errorBound, segmentList.get(0).getLength());
+            	System.out.println("k = " + maxKB.x());
+                System.out.println("b = " + maxKB.y());
+                int realLength = SegmentUtils.verifyTrueLength(point2Ds, maxKB.x(), maxKB.y(), errorBound, segmentList.get(0).getLength());
                 System.out.println("RealLength with lowBound is " + realLength);
-                this.slope = maxKB.getX();
-                this.intercept = maxKB.getY();
+                this.slope = maxKB.x();
+                this.intercept = maxKB.y();
             }
         return maxLength;
     }
@@ -408,8 +408,8 @@ public class PLAExtendDeepSearch6 {
                 if (!matrix[topSegment.idx][segment.idx])
                     continue;
 
-            Polygon2D intersection = Polygon2DUtils.intersection(currentPolygon, segment.getPolygonKB());
-            if (intersection.getVertexNumber() > 0) {
+            Polygon2D intersection = Polygons2D.intersection(currentPolygon, segment.getPolygonKB());
+            if (intersection.vertexNumber() > 0) {
                 segment.currentPolygon = intersection;
                 return segment;
             }
@@ -476,7 +476,7 @@ public class PLAExtendDeepSearch6 {
  //delete segment in the RTree
  	private void deleteSegment(PLASegment plaSegment){
  		Polygon2D currentPoly = plaSegment.getPolygonKB();
- 		Box2D box = currentPoly.getBoundingBox();
+ 		Box2D box = currentPoly.boundingBox();
  		Rectangle probeRect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
  		rTree.delete(probeRect, plaSegment.index);
  	}

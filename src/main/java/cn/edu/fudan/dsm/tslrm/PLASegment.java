@@ -55,11 +55,11 @@ public class PLASegment {
     private boolean isDelete;
     
     public double getY() {
-        return getCentroid().getX();
+        return getCentroid().x();
     }
 
     public double getM() {
-        return getCentroid().getY();
+        return getCentroid().y();
     }
 
     public double getSlope() {
@@ -75,18 +75,18 @@ public class PLASegment {
     }
 
     public double getK() {
-        return getPolygonKB().getCentroid().getX();
+        return getPolygonKB().centroid().x();
     }
 
     public double getB() {
-        return getPolygonKB().getCentroid().getY();
+        return getPolygonKB().centroid().y();
     }
 
     @Override
     public String toString() {
         if (polygonYM != null) {
-            double y = getCentroid().getX();
-            double m = getCentroid().getY();
+            double y = getCentroid().x();
+            double m = getCentroid().y();
             return "[" + getStart() + "," + getEnd() + "],length=" + getLength() + ",[y=" + toString(y) + "," + "m=" + toString(m) + "],[k=" + toString(getSlope()) + "," + "b=" + toString(getIntercept()) + "],[" + toString(getPolygonYM()) + "]";
         } else
             return "[" + getStart() + "," + getEnd() + "],length=" + getLength();
@@ -94,9 +94,9 @@ public class PLASegment {
 
     public static String toString(Polygon2D polygon2D) {
         StringBuilder sb = new StringBuilder();
-        Collection<Point2D> vertices = polygon2D.getVertices();
+        Collection<Point2D> vertices = polygon2D.vertices();
         for (Point2D next : vertices) {
-            sb.append("(").append(toString(next.getX())).append(",").append(toString(next.getY())).append(")");
+            sb.append("(").append(toString(next.x())).append(",").append(toString(next.y())).append(")");
         }
         return sb.toString();
     }
@@ -113,8 +113,8 @@ public class PLASegment {
         for (int k = 0; k < plaSegmentList.size(); k++) {
             PLASegment next = plaSegmentList.get(k);
             for (int i = next.getStart(); i <= next.getEnd(); i++) {
-                double x = points[i].getX();
-                double y = points[i].getY();
+                double x = points[i].x();
+                double y = points[i].y();
 
                 double ey = next.estimate(x);
                 double error = Math.abs(ey - y);
@@ -183,7 +183,7 @@ public class PLASegment {
 
     public Point2D getCentroid() {
         if (centroid == null) {
-            centroid = polygonYM.getCentroid();
+            centroid = polygonYM.centroid();
         }
         return centroid;
     }
@@ -226,8 +226,8 @@ public class PLASegment {
 	public boolean verify(Point2D[] points, double errorBound) {
         for (int i = start; i <= end; i++) {
             Point2D point = points[i];
-            double x = point.getX();
-            double y = point.getY();
+            double x = point.x();
+            double y = point.y();
 
             double estimate = estimate(x);
             double error = Math.abs(estimate - y);

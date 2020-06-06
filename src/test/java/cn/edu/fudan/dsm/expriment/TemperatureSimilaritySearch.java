@@ -103,15 +103,15 @@ public class TemperatureSimilaritySearch {
             PLARegionSearch plaRegionSearch = new PLARegionSearch(point2Ds);
             plaRegionSearch.errorBound = errorBound;
             for (int j = segs.size() - 1; j >= 0; j--) {
-                if (segs.get(j).getPolygonKB().getRings().size() > 1) {
+                if (segs.get(j).getPolygonKB().boundary().size() > 1) {
                     segs.remove(j);
                     System.out.println("Remove at " + j);
                 }
             }
 
             Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
-            double k = point2Ds1.getX();
-            double b = point2Ds1.getY();
+            double k = point2Ds1.x();
+            double b = point2Ds1.y();
 
             //print 0-1 file
             printResultFile("data/temperature/" + baseStation + "_" + targetStation + "_segment.csv", point2Ds, k, b, errorBound);
@@ -157,8 +157,8 @@ public class TemperatureSimilaritySearch {
         int consecutiveNum = 0;
         PrintWriter pw = new PrintWriter(new FileWriter(outFile));
         for (Point2D point : points) {
-            double x = point.getX();
-            double y = point.getY();
+            double x = point.x();
+            double y = point.y();
             double estimateY = k * x + b;
             if (Math.abs(estimateY - y) < errorBound) {
                 consecutiveNum++;

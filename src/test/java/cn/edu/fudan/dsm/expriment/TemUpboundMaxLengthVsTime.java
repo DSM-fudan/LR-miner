@@ -34,7 +34,7 @@ public class TemUpboundMaxLengthVsTime {
         plaRegionSearch.errorBound = errorBound;
         
         for(int i = segs.size() - 1; i >= 0; i--){
-        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
         		segs.remove(i);
         		System.out.println("Remove at " + i);
         	}
@@ -61,8 +61,8 @@ public class TemUpboundMaxLengthVsTime {
         
         System.out.println("FinalUpperBound = " + plaRegionSearch.maxUpBound);
         System.out.println("stopWatch.getTime() = " + stopWatch.getTime());
-        System.out.println("k = " + point2Ds1.getX());
-        System.out.println("b = " + point2Ds1.getY());       
+        System.out.println("k = " + point2Ds1.x());
+        System.out.println("b = " + point2Ds1.y());       
         System.out.println("RealLength = " + plaRegionSearch.finalLength);
 	}
 	

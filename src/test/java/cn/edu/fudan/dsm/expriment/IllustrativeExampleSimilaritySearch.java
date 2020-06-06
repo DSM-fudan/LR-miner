@@ -101,8 +101,8 @@ public class IllustrativeExampleSimilaritySearch {
         int consecutiveNum = 0;
         PrintWriter pw = new PrintWriter(new FileWriter(outFile));
         for (Point2D point : points) {
-            double x = point.getX();
-            double y = point.getY();
+            double x = point.x();
+            double y = point.y();
             double estimateY = k * x + b;
             if (Math.abs(estimateY - y) < errorBound) {
                 consecutiveNum++;

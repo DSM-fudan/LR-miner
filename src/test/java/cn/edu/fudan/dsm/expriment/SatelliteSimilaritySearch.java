@@ -63,15 +63,15 @@ public class SatelliteSimilaritySearch {
         PLARegionSearch plaRegionSearch = new PLARegionSearch(data);
         plaRegionSearch.errorBound = errorBound;
         for (int j = segs.size() - 1; j >= 0; j--) {
-            if (segs.get(j).getPolygonKB().getRings().size() > 1) {
+            if (segs.get(j).getPolygonKB().boundary().size() > 1) {
                 segs.remove(j);
                 System.out.println("Remove at " + j);
             }
         }
 
         Point2D point2Ds1 = plaRegionSearch.searchByBox2DWithInside(segs, error);
-        double k = point2Ds1.getX();
-        double b = point2Ds1.getY();
+        double k = point2Ds1.x();
+        double b = point2Ds1.y();
 
         //print 0-1 file
         printResultFile("data/satellite/" + columnA + "_" + columnB + "_" + data.length + "_segment.csv", data, k, b, errorBound);
@@ -82,7 +82,7 @@ public class SatelliteSimilaritySearch {
         // output csv containing all data to calculate Pearson correlation in Matlab
         print = new PrintWriter(new File("data/satellite/" + columnA + "_" + columnB + "_" + data.length + "_data.csv"));
         for (Point2D aData : data) {
-            print.println(aData.getX() + "," + aData.getY());
+            print.println(aData.x() + "," + aData.y());
         }
         print.close();
     }
@@ -145,8 +145,8 @@ public class SatelliteSimilaritySearch {
         int consecutiveNum = 0;
         PrintWriter pw = new PrintWriter(new FileWriter(outFile));
         for (Point2D point : points) {
-            double x = point.getX();
-            double y = point.getY();
+            double x = point.x();
+            double y = point.y();
             double estimateY = k * x + b;
             if (Math.abs(estimateY - y) < errorBound) {
                 consecutiveNum++;

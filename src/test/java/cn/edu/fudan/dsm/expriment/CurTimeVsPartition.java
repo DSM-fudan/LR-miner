@@ -32,14 +32,14 @@ public class CurTimeVsPartition {
 		        plaRegionSearch.errorBound = errorBound;
 		        
 		        for(int i = segs.size() - 1; i >= 0; i--){
-		        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+		        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
 		        		segs.remove(i);
 		        		System.out.println("Remove at " + i);
 		        	}
 		        }
 		        
 		        Point2D point2Ds1 = plaRegionSearch.searchByBox2DPerLength(segs, error, outFile, perLength);
-		        System.out.println("k = " + point2Ds1.getX() + " b = " + point2Ds1.getY());
+		        System.out.println("k = " + point2Ds1.x() + " b = " + point2Ds1.y());
 		        System.out.println("FinalLegth = " + plaRegionSearch.finalLength);
 			}
 			
@@ -61,14 +61,14 @@ public class CurTimeVsPartition {
 		        plaRegionSearch.errorBound = errorBound;
 		        
 		        for(int i = segs.size() - 1; i >= 0; i--){
-		        	if(segs.get(i).getPolygonKB().getRings().size() > 1){
+		        	if(segs.get(i).getPolygonKB().boundary().size() > 1){
 		        		segs.remove(i);
 		        		System.out.println("Remove at " + i);
 		        	}
 		        }
 		        
 		        Point2D point2Ds1 = plaRegionSearch.searchByBox2DPerLengthInsides(segs, error, outFile, perLength);
-		        System.out.println("k = " + point2Ds1.getX() + " b = " + point2Ds1.getY());
+		        System.out.println("k = " + point2Ds1.x() + " b = " + point2Ds1.y());
 		        System.out.println("FinalLegth = " + plaRegionSearch.finalLength);
 			}
 			

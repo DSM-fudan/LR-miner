@@ -3,9 +3,8 @@ package cn.edu.fudan.dsm.tslrm;
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.LinearRing2D;
-import math.geom2d.polygon.MultiPolygon2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 
 import java.util.*;
@@ -69,16 +68,16 @@ public class TSPLAPointBoundKBMiner {
     			 }else{
     				 Polygon2D p1 = polygonKBOfPoint(points[j]);
     				 lastPoint = points[j];
-    				 p = Polygon2DUtils.intersection(p, p1);
+    				 p = Polygons2D.intersection(p, p1);
     			 }
 
                  //check the intersection polygon
-    			 if(p.getVertexNumber() > 0){              //the polygon is one points? is it possible? or just some points with the same x,y
+    			 if(p.vertexNumber() > 0){              //the polygon is one points? is it possible? or just some points with the same x,y
     				 PLASegment plaSegment = new PLASegment();
     				 plaSegment.setStart(i);
     				 plaSegment.setEnd(j);
-                     plaSegment.setStartX(points[i].getX());
-                     plaSegment.setStartY(points[i].getY());
+                     plaSegment.setStartX(points[i].x());
+                     plaSegment.setStartY(points[i].y());
                      plaSegment.setPolygonKB(p);
                      if (plaSegment.getLength() == length){
                     	 ret.add(plaSegment);
@@ -105,16 +104,16 @@ public class TSPLAPointBoundKBMiner {
                 }else{
                 	Polygon2D p1 = polygonKBOfPoint(points[j]);
                 	lastPoint = points[j];
-                	p = Polygon2DUtils.intersection(p, p1);
+                	p = Polygons2D.intersection(p, p1);
                 	              	
                 }
-                if (p.getVertexNumber() > 0) //have intersection
+                if (p.vertexNumber() > 0) //have intersection
                 {
             		 PLASegment plaSegment = new PLASegment();
                      plaSegment.setStart(i);
                      plaSegment.setEnd(j);
-                     plaSegment.setStartX(points[i].getX());
-                     plaSegment.setStartY(points[i].getY());
+                     plaSegment.setStartX(points[i].x());
+                     plaSegment.setStartY(points[i].y());
                      plaSegment.setPolygonKB(p);
                      if (plaSegment.getLength() >= 3) ret.add(plaSegment);
                 } else
@@ -183,19 +182,19 @@ public class TSPLAPointBoundKBMiner {
                 Polygon2D segPolygonKB = seg.getPolygonKB();
                 Polygon2D intersection = null;
                 try {
-                    intersection = Polygon2DUtils.intersection(removePolygon, segPolygonKB);
-                    if (intersection.getRings().size() > 1) {
+                    intersection = Polygons2D.intersection(removePolygon, segPolygonKB);
+                    if (intersection.boundary().size() > 1) {
                         System.out.println(" = ");
 //                        for (int j = 0; j < intersection.getRings().size(); j++) {
 //                            LinearRing2D[] linearRing2Ds = intersection.getRings().toArray(new LinearRing2D[0]);
 //                            linearRing2Ds.
 //                        }
 //                        intersection.getRings().remove(0);
-                        for (Iterator<? extends LinearRing2D> iterator = intersection.getRings().iterator(); iterator.hasNext(); ) {
+                        for (Iterator<? extends LinearRing2D> iterator = intersection.boundary().iterator(); iterator.hasNext(); ) {
                             LinearRing2D next = iterator.next();
-                            System.out.println("next.getVertexNumber() = " + next.getVertexNumber());
-                            if (next.getVertexNumber() > 3) {
-                                intersection = new SimplePolygon2D(intersection.getVertices());
+                            System.out.println("next.getVertexNumber() = " + next.vertexNumber());
+                            if (next.vertexNumber() > 3) {
+                                intersection = new SimplePolygon2D(intersection.vertices());
                                 break;
                             }
                         }
@@ -206,7 +205,7 @@ public class TSPLAPointBoundKBMiner {
                     System.out.println("removePolygon = " + removePolygon);
                     throw e;
                 }
-                if (intersection.getVertexNumber() > 0) //has intersected
+                if (intersection.vertexNumber() > 0) //has intersected
                 {
                     PLASegment newSeg = new PLASegment();
 
@@ -260,7 +259,7 @@ public class TSPLAPointBoundKBMiner {
                 if (nextSegment.getStart() == (segment.getEnd() + 1)) {
                     segment.setEnd(nextSegment.getEnd());
                     segment.setLength(segment.getLength() + nextSegment.getLength());
-                    segment.setPolygonKB(Polygon2DUtils.intersection(segment.getPolygonKB(), nextSegment.getPolygonKB()));
+                    segment.setPolygonKB(Polygons2D.intersection(segment.getPolygonKB(), nextSegment.getPolygonKB()));
                 } else {
                     ret.add(segment);
                     segment = new PLASegment();
@@ -292,17 +291,17 @@ public class TSPLAPointBoundKBMiner {
         PLASegment plaSegment = new PLASegment();
         plaSegment.setStart(i);
         plaSegment.setEnd(i);
-        plaSegment.setStartX(points[i].getX());
-        plaSegment.setStartY(points[i].getY());
+        plaSegment.setStartX(points[i].x());
+        plaSegment.setStartY(points[i].y());
         plaSegment.setPolygonKB(polygonKBOfPoint(points[i]));
 
 //        boolean verify = plaSegment.verify(points, pointErrorBound);
 
         while (j < points.length) {
             Polygon2D p1 = polygonKBOfPoint(points[j]);
-            Polygon2D p = Polygon2DUtils.intersection(plaSegment.getPolygonKB(), p1);
+            Polygon2D p = Polygons2D.intersection(plaSegment.getPolygonKB(), p1);
 
-            if (p.getVertexNumber() <= 0) //intersection is null
+            if (p.vertexNumber() <= 0) //intersection is null
             {
                 plaSegmentList.add(plaSegment);
 
@@ -311,8 +310,8 @@ public class TSPLAPointBoundKBMiner {
                 plaSegment = new PLASegment();
                 plaSegment.setStart(i);
                 plaSegment.setEnd(i);
-                plaSegment.setStartX(points[i].getX());
-                plaSegment.setStartY(points[i].getY());
+                plaSegment.setStartX(points[i].x());
+                plaSegment.setStartY(points[i].y());
                 plaSegment.setPolygonKB(polygonKBOfPoint(points[i]));
             } else {
                 plaSegment.setEnd(j);
@@ -328,8 +327,8 @@ public class TSPLAPointBoundKBMiner {
     }
 
     private Polygon2D polygonKBOfPoint(Point2D point) {
-        double x = point.getX();
-        double y = point.getY();
+        double x = point.x();
+        double y = point.y();
         double k[] = X_INF;
         double b[] = {(y - pointErrorBound - D_MIN * x), (y - pointErrorBound - D_MAX * x), (y + pointErrorBound - D_MAX * x), (y + pointErrorBound - D_MIN * x)};
         return new SimplePolygon2D(k, b);
@@ -499,9 +498,9 @@ public class TSPLAPointBoundKBMiner {
                     //check polygon intersection
                     Polygon2D p2 = extendSegment.getPolygonKB();
 
-                    Polygon2D intersection = Polygon2DUtils.intersection(p1, p2);
+                    Polygon2D intersection = Polygons2D.intersection(p1, p2);
 
-                    if (intersection.getVertexNumber() > 0) {
+                    if (intersection.vertexNumber() > 0) {
                         PLASegment newSegment = new PLASegment();
                         newSegment.setLength(segment.getLength() + extendSegment.getLength());
                         newSegment.children.addAll(segment.children);
@@ -670,7 +669,7 @@ public class TSPLAPointBoundKBMiner {
                     PLASegment topSegment = stack.get(stack.size() - 1);
                     Polygon2D topPolygon = topSegment.currentPolygon;
                     Polygon2D nextPolygon = nextSegment.getPolygonKB();
-                    Polygon2D intersection = Polygon2DUtils.intersection(topPolygon, nextPolygon);
+                    Polygon2D intersection = Polygons2D.intersection(topPolygon, nextPolygon);
 
                     intersectionCount++;
                     if (intersectionCount % 1000000 == 0) {
@@ -678,7 +677,7 @@ public class TSPLAPointBoundKBMiner {
                     }
 
 
-                    if (intersection.getVertexNumber() > 0) {
+                    if (intersection.vertexNumber() > 0) {
                         nextSegment.currentPolygon = intersection;
                         nextSegment.totalLength = topSegment.totalLength + nextSegment.getLength();
                         stack.add(nextSegment);
@@ -762,7 +761,7 @@ public class TSPLAPointBoundKBMiner {
             for (int j = i; j < segmentList.size(); j++) {
                 PLASegment plaSegment = segmentList.get(j);
 
-                if (Polygon2DUtils.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).getVertexNumber() > 0) {
+                if (Polygons2D.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).vertexNumber() > 0) {
                     matrix[i][j] = true;
                     matrix[j][i] = true;
                 }
@@ -950,7 +949,7 @@ public class TSPLAPointBoundKBMiner {
     			if(tempIndex > i){
     				PLASegment tempSeg = indexSegs[tempIndex];
     				Polygon2D tempPoly = tempSeg.getPolygonKB();
-    				if(Polygon2DUtils.intersection(curPoly, tempPoly).getVertexNumber() > 0){
+    				if(Polygons2D.intersection(curPoly, tempPoly).vertexNumber() > 0){
 						matrix[i][j] = true;
 						matrix[j][i] = true;
 					}
@@ -971,7 +970,7 @@ public class TSPLAPointBoundKBMiner {
              for (int j = i; j < segmentList.size(); j++) {
                  PLASegment plaSegment = segmentList.get(j);
 
-                 if (Polygon2DUtils.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).getVertexNumber() > 0) {
+                 if (Polygons2D.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).vertexNumber() > 0) {
                      matrix[i][j] = true;
                      matrix[j][i] = true;
                  }
@@ -989,7 +988,7 @@ public class TSPLAPointBoundKBMiner {
              for (int j = i; j < segmentList.size(); j++) {
                  PLASegment plaSegment = segmentList.get(j);
 
-                 if (Polygon2DUtils.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).getVertexNumber() > 0) {
+                 if (Polygons2D.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).vertexNumber() > 0) {
                 	 matrix1[i][j] = true;
                 	 matrix1[j][i] = true;
                  }
@@ -1022,7 +1021,7 @@ public class TSPLAPointBoundKBMiner {
      			if(tempIndex > i){
      				PLASegment tempSeg = indexSegs[tempIndex];
      				Polygon2D tempPoly = tempSeg.getPolygonKB();
-     				if(Polygon2DUtils.intersection(curPoly, tempPoly).getVertexNumber() > 0){
+     				if(Polygons2D.intersection(curPoly, tempPoly).vertexNumber() > 0){
      					matrix2[i][j] = true;
      					matrix2[j][i] = true;
  					}
@@ -1068,7 +1067,7 @@ public class TSPLAPointBoundKBMiner {
     			next.children.add(next);
     			list.add(next);
     		}else{
-    			Box2D box = nextPoly.getBoundingBox();
+    			Box2D box = nextPoly.boundingBox();
     	    	Rectangle nextRect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
     	    	rTree.delete(nextRect, i);
     	    	System.out.println("delete 0ne");
@@ -1102,8 +1101,8 @@ public class TSPLAPointBoundKBMiner {
     				}
     				if(isSame){
     					Polygon2D testPolygon = testSegment.getPolygonKB();
-    					Polygon2D intersection = Polygon2DUtils.intersection(curPolygon, testPolygon);
-    					if(intersection.getVertexNumber() > 0){
+    					Polygon2D intersection = Polygons2D.intersection(curPolygon, testPolygon);
+    					if(intersection.vertexNumber() > 0){
     						int tempMax = maxInsectLength(rTree, intersection, indexSegs);
     						if(tempMax >= _max_Length){
     							PLASegment seg1 = children1.get(kLevel - 2);
@@ -1152,7 +1151,7 @@ public class TSPLAPointBoundKBMiner {
     
     public static Rectangle getRectangle(PLASegment seg){
     	Polygon2D poly = seg.getPolygonKB();
-    	Box2D box = poly.getBoundingBox();
+    	Box2D box = poly.boundingBox();
     	return new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
     }
     public static RTree builtTree(PLASegment[] allSegs){
@@ -1173,7 +1172,7 @@ public class TSPLAPointBoundKBMiner {
     }
 
     public static int maxInsectLength(RTree rTree, Polygon2D probePoly, PLASegment[] indexSegs){
-    	Box2D box = probePoly.getBoundingBox();
+    	Box2D box = probePoly.boundingBox();
     	Rectangle rect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
     	List<Node> leafs = rTree.intersects(rect);
     	
@@ -1188,7 +1187,7 @@ public class TSPLAPointBoundKBMiner {
     			PLASegment tempSeg = indexSegs[index];
     			Polygon2D tempPoly = tempSeg.getPolygonKB();
     			
-    			if(Polygon2DUtils.intersection(probePoly, tempPoly).getVertexNumber() > 0){
+    			if(Polygons2D.intersection(probePoly, tempPoly).vertexNumber() > 0){
     				length += tempSeg.getLength();
     			}
     		}

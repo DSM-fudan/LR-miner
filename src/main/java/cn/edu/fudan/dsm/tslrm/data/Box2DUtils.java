@@ -18,7 +18,7 @@ public class Box2DUtils {
         Box2D ret = null;
         for (int i = 0; i < polygon2DList.size(); i++) {
             Polygon2D polygon2D = polygon2DList.get(i);
-            Box2D boundingBox = polygon2D.getBoundingBox();
+            Box2D boundingBox = polygon2D.boundingBox();
             if (ret == null) {
                 ret = boundingBox;
             } else {
@@ -60,7 +60,7 @@ public class Box2DUtils {
         Box2D ret = null;
         for (int i = 0; i < segmentList.size(); i++) {
             Polygon2D polygon2D = segmentList.get(i).getPolygonKB();
-            Box2D boundingBox = polygon2D.getBoundingBox();
+            Box2D boundingBox = polygon2D.boundingBox();
             if (ret == null) {
                 ret = boundingBox;
             } else {

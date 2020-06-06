@@ -2,7 +2,7 @@ package cn.edu.fudan.dsm.tslrm;
 
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 import org.apache.commons.math3.geometry.euclidean.oned.Interval;
 
@@ -90,9 +90,9 @@ public class PLAPointBoundKBMiner {
                 PLASegment seg = list.get(i);
 
                 Polygon2D segPolygonKB = seg.getPolygonKB();
-                Polygon2D intersection = Polygon2DUtils.intersection(removePolygon, segPolygonKB);
+                Polygon2D intersection = Polygons2D.intersection(removePolygon, segPolygonKB);
 
-                if (intersection.getVertexNumber() > 0) //has intersected
+                if (intersection.vertexNumber() > 0) //has intersected
                 {
                     PLASegment newSeg = new PLASegment();
 
@@ -140,17 +140,17 @@ public class PLAPointBoundKBMiner {
         PLASegment plaSegment = new PLASegment();
         plaSegment.setStart(i);
         plaSegment.setEnd(i);
-        plaSegment.setStartX(points[i].getX());
-        plaSegment.setStartY(points[i].getY());
+        plaSegment.setStartX(points[i].x());
+        plaSegment.setStartY(points[i].y());
         plaSegment.setPolygonKB(polygonKBOfPoint(points[i]));
 
 //        boolean verify = plaSegment.verify(points, pointErrorBound);
 
         while (j < points.length) {
             Polygon2D p1 = polygonKBOfPoint(points[j]);
-            Polygon2D p = Polygon2DUtils.intersection(plaSegment.getPolygonKB(), p1);
+            Polygon2D p = Polygons2D.intersection(plaSegment.getPolygonKB(), p1);
 
-            if (p.getVertexNumber() <= 0) //intersection is null
+            if (p.vertexNumber() <= 0) //intersection is null
             {
                 plaSegmentList.add(plaSegment);
 
@@ -159,8 +159,8 @@ public class PLAPointBoundKBMiner {
                 plaSegment = new PLASegment();
                 plaSegment.setStart(i);
                 plaSegment.setEnd(i);
-                plaSegment.setStartX(points[i].getX());
-                plaSegment.setStartY(points[i].getY());
+                plaSegment.setStartX(points[i].x());
+                plaSegment.setStartY(points[i].y());
                 plaSegment.setPolygonKB(polygonKBOfPoint(points[i]));
             } else {
                 plaSegment.setEnd(j);
@@ -176,8 +176,8 @@ public class PLAPointBoundKBMiner {
     }
 
     private Polygon2D polygonKBOfPoint(Point2D point) {
-        double x = point.getX();
-        double y = point.getY();
+        double x = point.x();
+        double y = point.y();
         double k[] = X_INF;
         double b[] = {(y - pointErrorBound - D_MIN * x), (y - pointErrorBound - D_MAX * x), (y + pointErrorBound - D_MAX * x), (y + pointErrorBound - D_MIN * x)};
         return new SimplePolygon2D(k, b);

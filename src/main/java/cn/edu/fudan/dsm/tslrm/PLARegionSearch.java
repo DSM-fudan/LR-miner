@@ -5,7 +5,7 @@ import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.math3.util.Pair;
@@ -175,8 +175,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -325,8 +325,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -469,8 +469,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -595,8 +595,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -720,8 +720,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();                  
@@ -843,8 +843,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -971,8 +971,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -1120,8 +1120,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -1265,8 +1265,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -1417,8 +1417,8 @@ public class PLARegionSearch {
                     //get the center point of box
 //                    k = childBox.getMinX() + childBox.getWidth() / 2;
 //                    b = childBox.getMinY() + childBox.getHeight() / 2;
-                    k = verifyPoint.getX();
-                    b = verifyPoint.getY();
+                    k = verifyPoint.x();
+                    b = verifyPoint.y();
                     verifyWatch.resume();
                     int trueLength = SegmentUtils.verifyTrueLength(point2Ds, k, b, errorBound, segmentList.get(0).getLength());
                     verifyWatch.suspend();
@@ -1530,9 +1530,9 @@ public class PLARegionSearch {
         for (int i = 0; i < segmentList.size(); i++) {
             PLASegment segment = segmentList.get(i);
             try {
-                Polygon2D intersection = Polygon2DUtils.intersection(p, segment.getPolygonKB());
+                Polygon2D intersection = Polygons2D.intersection(p, segment.getPolygonKB());
                 plePolyNum++;
-                if (intersection.getVertexNumber() > 0) {
+                if (intersection.vertexNumber() > 0) {
                     list.add(segment);
                 }
             } catch (Exception e) {
@@ -1566,12 +1566,12 @@ public class PLARegionSearch {
                 continue;                 //for next segment
             }
             try {                         //for normal polygon
-                Polygon2D intersection = Polygon2DUtils.intersection(p, segment.getPolygonKB());
+                Polygon2D intersection = Polygons2D.intersection(p, segment.getPolygonKB());
                 plePolyNum++;
-                if (intersection.getVertexNumber() > 0) {     //if intersection
+                if (intersection.vertexNumber() > 0) {     //if intersection
                     list.add(segment);                        //add segment
-                    double area1 = intersection.getArea();
-                    double area2 = p.getArea();             //deal with surround
+                    double area1 = intersection.area();
+                    double area2 = p.area();             //deal with surround
                     if (Math.abs(area1 - area2) / area2 < 0.000005) {                       //surround
                         insides.add(true);
                     } else {

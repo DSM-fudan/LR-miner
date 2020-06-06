@@ -4,7 +4,7 @@ import cn.edu.fudan.dsm.tslrm.data.SegmentUtils;
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 import math.geom2d.polygon.SimplePolygon2D;
 
 import java.util.ArrayList;
@@ -13,8 +13,6 @@ import java.util.Properties;
 
 import com.infomatiq.jsi.rtree.RTree;
 import com.infomatiq.jsi.rtree.Rectangle;
-
-import rtree.CachedPersistentPageFile;
 
 /**
  * Created with IntelliJ IDEA.
@@ -128,7 +126,7 @@ public class PLAExtendDeepSearchWithRTree2D {
                 nextSegment.totalLength = currentLength;
 
                 if (currentLength > maxLength) {
-                    maxKB = stack.get(stack.size() - 1).currentPolygon.getCentroid();
+                    maxKB = stack.get(stack.size() - 1).currentPolygon.centroid();
                     minStackSize = segmentList.size();//to reset
                     maxLength = currentLength;
 //                    System.out.println("maxLength = " + maxLength);
@@ -220,11 +218,11 @@ public class PLAExtendDeepSearchWithRTree2D {
                 PLASegment segment = maxList.get(i);
                 System.out.println("segment = " + segment);
             }
-            System.out.println("k = " + maxKB.getX());
-            System.out.println("b = " + maxKB.getY());
+            System.out.println("k = " + maxKB.x());
+            System.out.println("b = " + maxKB.y());
 
-            this.slope = maxKB.getX();
-            this.intercept = maxKB.getY();
+            this.slope = maxKB.x();
+            this.intercept = maxKB.y();
 
             //verify the true maxLength
 //            maxLength = SegmentUtils.verifyTrueLength(segmentList,maxKB.getX(),maxKB.getY());
@@ -247,7 +245,7 @@ public class PLAExtendDeepSearchWithRTree2D {
                     }
                 }
                 PLASegment tempSeg = segmentList.get(i);
-                Box2D box = tempSeg.getPolygonKB().getBoundingBox();
+                Box2D box = tempSeg.getPolygonKB().boundingBox();
                 Rectangle rect = new Rectangle(box.getMinX(), box.getMinY(), box.getMaxX(), box.getMaxY());
                 rTree.delete(rect, i);
             }
@@ -339,8 +337,8 @@ public class PLAExtendDeepSearchWithRTree2D {
                 if (false == matrix[topSegment.idx][i])
                     continue;
 
-            Polygon2D intersection = Polygon2DUtils.intersection(currentPolygon, segment.getPolygonKB());
-            if (intersection.getVertexNumber() >= 0) {
+            Polygon2D intersection = Polygons2D.intersection(currentPolygon, segment.getPolygonKB());
+            if (intersection.vertexNumber() >= 0) {
                 segment.currentPolygon = intersection;
                 return segment;
             }

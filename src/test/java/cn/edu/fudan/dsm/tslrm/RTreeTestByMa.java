@@ -1,23 +1,16 @@
 package cn.edu.fudan.dsm.tslrm;
 
-import gnu.trove.TIntProcedure;
-
 import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
 import math.geom2d.Point2D;
-import math.geom2d.polygon.Polygon2DUtils;
+import math.geom2d.polygon.Polygons2D;
 
 import org.junit.Test;
 
-import rtree.MemoryPageFile;
-
-import junit.framework.TestCase;
-
 import cn.edu.fudan.dsm.tslrm.data.DataGenerator;
 
-import com.infomatiq.jsi.rtree.Point;
 import com.infomatiq.jsi.rtree.Rectangle;
 import com.infomatiq.jsi.rtree.Node;
 import com.infomatiq.jsi.rtree.RTree;
@@ -235,7 +228,7 @@ public class RTreeTestByMa {
           for (int j = i; j < segmentList.size(); j++) {
               PLASegment plaSegment = segmentList.get(j);
 
-              if (Polygon2DUtils.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).getVertexNumber() > 0) {
+              if (Polygons2D.intersection(segment.getPolygonKB(), plaSegment.getPolygonKB()).vertexNumber() > 0) {
                   matrix1[i][j] = true;
                   matrix1[j][i] = true;
               	}
