@@ -1516,7 +1516,7 @@ public class PLARegionSearch {
         return calcUpperBound(list);
     }
 
-    public int calcUpperBound(List<PLASegment> list) {
+    public static int calcUpperBound(List<PLASegment> list) {
         int ret = 0;
         if (list.size() > 0) {
             ret = list.get(0).getLength() + calcUpperBound(list, list.get(0));
