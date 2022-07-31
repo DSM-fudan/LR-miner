@@ -2,10 +2,7 @@ package cn.edu.fudan.dsm.tslrm;
 
 import math.geom2d.Box2D;
 import math.geom2d.Point2D;
-import math.geom2d.polygon.LinearRing2D;
-import math.geom2d.polygon.Polygon2D;
-import math.geom2d.polygon.Polygons2D;
-import math.geom2d.polygon.SimplePolygon2D;
+import math.geom2d.polygon.*;
 
 import java.util.*;
 
@@ -24,6 +21,23 @@ public class TSPLAPointBoundKBMiner {
     public TSPLAPointBoundKBMiner(Point2D[] point2Ds, double errorBound) {
         this.points = point2Ds;
         this.pointErrorBound = errorBound;
+    }
+
+    public PLASegment buildSpecificSingleSegment(Point2D[] points,int length, int start){
+        Polygon2D p = polygonKBOfPoint(points[start]);
+        for(int j = start + 1; j < start + length; j++){
+            Polygon2D p1 = polygonKBOfPoint(points[j]);
+            p = Polygon2DUtils.intersection(p, p1);
+            if(p.getVertexNumber() <= 1)    return null;
+        }
+
+        PLASegment plaSegment = new PLASegment();
+        plaSegment.setStart(start);
+        plaSegment.setEnd(start + length - 1);
+        plaSegment.setStartX(points[start].getX());
+        plaSegment.setStartY(points[start].getY());
+        plaSegment.setPolygonKB(p);
+        return plaSegment;
     }
 
     public static void main(String[] args) {
