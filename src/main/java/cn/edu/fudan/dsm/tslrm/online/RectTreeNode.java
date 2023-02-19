@@ -11,16 +11,19 @@ import math.geom2d.Point2D;
 import math.geom2d.polygon.Polygon2D;
 import math.geom2d.polygon.Polygon2DUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.time.StopWatch;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class RectTreeNode {
-    static public int min_seg_length = 10;
-    static public int window_length =  5000;
+    static public int min_seg_length = 3;
+    static public int window_length =  10000;
     static public RectTreeNode bsf_node;
     static public int bsf_len = 0;
     static public double error_bound = 0.1;
@@ -269,28 +272,31 @@ public class RectTreeNode {
     }
 
     private boolean update_bsf(){
-        boolean tag = true;
-        if(upper_bound > bsf_len){
-            if(upper_bound > len_mid_point) {
-                if(left == null && right == null) {
-                    if (len_mid_point > bsf_len) {
-                        bsf_node = this;
-                        bsf_len = len_mid_point;
-                    }
+        if (bsf_len > upper_bound) {
+            remove_subtrees();
+            return false;
+        } else if (bsf_len == upper_bound) { // 不能remove_subtrees，因为此时这颗节点矩形的子树上的UB和len根本都没有更新。如果不走updateThirdStage函数，即子节点没有走insertSeg(是有可能重新计算VI/VS/VH的，即UB可能变大)/deleteSeg(ub变小)，
+            // remove_subtrees();
+            // //有可能当前bsf_node就在这颗树的某个子孙节点上。然后这个目标节点的ub和len由于路径被删除一直没被更新（可能变大）
+            return true;
+        } else {
+            boolean tag = true;
+            if (bsf_len < len_mid_point) {
+
+                bsf_node = this;
+                bsf_len = len_mid_point;
+            }
+            if (upper_bound > len_mid_point) {
+                if (left == null && right == null) {
                     split();
                     tag = false;
                 }
-            }
-            else {
+            } else {
                 remove_subtrees();
                 tag = false;
             }
+            return tag;
         }
-        if(len_mid_point > bsf_len){
-            bsf_node = this;
-            bsf_len = len_mid_point;
-        }
-        return tag;
     }
 
     private RectTreeNode expand_root(boolean[] expansion, double[] new_box){
@@ -431,6 +437,7 @@ public class RectTreeNode {
             for(int i=0;i<cur_valid_segs.size();++i){
                 if(bsf_node.isHit.get(i)){
                     bsf_start = cur_valid_segs.get(i).getStart();
+                    break;
                 }
             }
             if(bsf_start == tick - window_length){
@@ -439,6 +446,7 @@ public class RectTreeNode {
                for(int i=0;i<cur_valid_segs.size();++i){
                     if(bsf_node.isHit.get(i) && tag){
                         bsf_second_start = cur_valid_segs.get(i).getStart();
+                        break;
                     }else if(bsf_node.isHit.get(i) && !tag){
                         tag = true;
                     }
@@ -521,12 +529,12 @@ public class RectTreeNode {
     }
 
     public static void main(String[] args) throws IOException {
-        int length = 10000;
-        String fileName = "enter your file.csv";
-        Point2D[] point2Ds = readFromFile(fileName,0,1);
+        int length = 74000;
+        String fileName = "data/experiments/5_USD_CAD_MXN_1.txt";
+        Point2D[] point2Ds = ClimateDATAUtils.readPointsFromFile(new File(fileName), length);
 
         Point2D[] init_points = new Point2D[window_length];
-        System.arraycopy(point2Ds, 0, init_points, 0,window_length);
+        System.arraycopy(point2Ds, 0, init_points, 0, window_length);
         TSPLAPointBoundKBMiner miner = new TSPLAPointBoundKBMiner(init_points, error_bound);
         cur_valid_segs = miner.buildSpecificSegments(min_seg_length);
 
@@ -534,11 +542,44 @@ public class RectTreeNode {
         root.initialize();
         System.out.println(bsf_len);
 
-        for(int i= window_length; i < length;++i){
-            root.update(point2Ds, i, miner);
-            System.out.print(i);
-            System.out.print(':');
-            System.out.println(bsf_len);
+        // runtime vs length 效率实验
+        List<Long> graphPoints = new ArrayList<>();
+        List<Integer> counts = new ArrayList<>();
+        long totalTime = 0;
+        int totalCount = 0;
+        for (int i = window_length; i < length; ++i) {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            root.update(point2Ds, i, miner); // 更新矩形树
+            stopWatch.stop();
+
+            long iTime = stopWatch.getTime(); // 单位是毫秒
+            totalTime += iTime;
+
+            int icount = root.countNodes();
+            totalCount += icount;
+            // System.out.println("i: " + i + "," + "iTime : " + iTime);
+            System.out.println("i: " + i + "," + "iTime : " + iTime + ", totalTime: " + totalTime + ", icount: "
+                    + icount + ", bsflen: " + bsf_len);
+
+            if ((i + 1) % 1000 == 0) {
+                int pointIndex = ((i + 1 - window_length) / 1000); // (1,1000) （2,1000)....(74,1000)
+                long point1000Time = totalTime / 1000;
+                int averageCount = totalCount / 1000;
+                System.out.println("pointIndex: " + pointIndex + ", point1000Time : " + point1000Time
+                        + ", averageCount : " + averageCount);
+                graphPoints.add(point1000Time);
+                counts.add(averageCount);
+                totalTime = 0;
+                totalCount = 0;
+            }
+        }
+        for (int i = 0; i < graphPoints.size(); i++) {
+            System.out.println(i + "    :    " + graphPoints.get(i));
+        }
+        System.out.println("counts    :    ");
+        for (int i = 0; i < counts.size(); i++) {
+            System.out.println(i + "    :    " + counts.get(i));
         }
     }
 
@@ -557,5 +598,30 @@ public class RectTreeNode {
         return data;
     }
 
-
+    public int countNodes() {
+        // 用递归的方式,用递归真的太简单了
+        // if(root == NULL)
+        // return 0;
+        // return
+        // 1+countNodes(root->left)+countNodes(root->right);//属于后序遍历，先求了子树的，然后加上了中间的根节点
+        // 还可以采用层序遍历的方式，稍微改动模板，其实前序后序中序遍历感觉都行
+        if (root == null)
+            return 0;
+        Queue<RectTreeNode> que = new LinkedList<>();
+        que.add(root);
+        int result = 0;
+        while (!que.isEmpty()) {
+            int size = que.size();
+            for (int i = 0; i < size; i++) {
+                RectTreeNode node = que.peek();
+                que.poll();
+                if (node.left != null)
+                    que.add(node.left);
+                if (node.right != null)
+                    que.add(node.right);
+                result++;
+            }
+        }
+        return result;
+    }
 }
