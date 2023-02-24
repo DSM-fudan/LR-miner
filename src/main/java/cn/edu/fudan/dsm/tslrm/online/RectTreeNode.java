@@ -14,13 +14,11 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class RectTreeNode {
     static public int min_seg_length = 10;
-    static public int window_length =  5000;
+    static public int window_length =  10000;
     static public RectTreeNode bsf_node;
     static public int bsf_len = 0;
     static public double error_bound = 0.1;
@@ -130,11 +128,27 @@ public class RectTreeNode {
             bsf_node = this;
         }
         if(len_mid_point < upper_bound){
-            split();
+            buildRectTree();
         }
     }
 
-    private void split(){
+    private void buildRectTree(){
+        Queue<RectTreeNode> queue = new PriorityQueue<>((x1, x2) -> {return x2.upper_bound - x1.upper_bound;});
+        queue.add(this);
+
+        while(!queue.isEmpty()){
+            RectTreeNode curNode = queue.poll();
+            if(curNode.upper_bound <= bsf_len)
+                break;
+            curNode.splitBox();;
+            curNode.left = new RectTreeNode(curNode, true);
+            curNode.right = new RectTreeNode(curNode, false);
+            queue.add(curNode.left);
+            queue.add(curNode.right);
+        }
+    }
+
+    private void splitBox(){
         if(box.getHeight() > box.getWidth()){
             // split on y
             split_axis = false;
@@ -144,6 +158,10 @@ public class RectTreeNode {
             split_axis = true;
             split_point = (box.getMaxX() + box.getMinX()) / 2.0;
         }
+    }
+
+    private void split(){
+        splitBox();
         left = new RectTreeNode(this, true);
         right = new RectTreeNode(this, false);
         boolean need_left = left.upper_bound > bsf_len && left.len_mid_point < left.upper_bound;
@@ -151,10 +169,12 @@ public class RectTreeNode {
         if(need_left && need_right){
             if(left.upper_bound > right.upper_bound){
                 left.split();
-                right.split();
+                if(right.upper_bound > bsf_len && right.len_mid_point < right.upper_bound)
+                    right.split();
             }else{
                 right.split();
-                left.split();
+                if(left.upper_bound > bsf_len && left.len_mid_point < left.upper_bound)
+                    left.split();
             }
         }
         else if(need_left)   left.split();
@@ -268,7 +288,7 @@ public class RectTreeNode {
 
     }
 
-    private boolean update_bsf(){
+    private boolean update_bsf_old(){
         boolean tag = true;
         if(upper_bound > bsf_len){
             if(upper_bound > len_mid_point) {
@@ -292,6 +312,33 @@ public class RectTreeNode {
         }
         return tag;
     }
+
+    private boolean update_bsf(){
+        if (bsf_len > upper_bound) {
+            remove_subtrees();
+            return false;
+        } else if (bsf_len == upper_bound) {
+            remove_subtrees();
+            return false;
+        } else {
+            boolean tag = true;
+            if (bsf_len < len_mid_point) {
+                bsf_node = this;
+                bsf_len = len_mid_point;
+            }
+            if (upper_bound > len_mid_point) {
+                if (left == null && right == null) {
+                    split();
+                    tag = false;
+                }
+            } else {    // we have found the star node
+                remove_subtrees();
+                tag = false;
+            }
+            return tag;
+        }
+    }
+
 
     private RectTreeNode expand_root(boolean[] expansion, double[] new_box){
         RectTreeNode old_root = this;
@@ -434,19 +481,19 @@ public class RectTreeNode {
                 }
             }
             if(bsf_start == tick - window_length){
-               int bsf_second_start = -1;
-               boolean tag = false;
-               for(int i=0;i<cur_valid_segs.size();++i){
+                int bsf_second_start = -1;
+                boolean tag = false;
+                for(int i=0;i<cur_valid_segs.size();++i){
                     if(bsf_node.isHit.get(i) && tag){
                         bsf_second_start = cur_valid_segs.get(i).getStart();
                     }else if(bsf_node.isHit.get(i) && !tag){
                         tag = true;
                     }
                 }
-               if(bsf_second_start == -1 || bsf_second_start > bsf_start + min_seg_length - 1)
-                   bsf_len -= min_seg_length;
-               else
-                   bsf_len -= (bsf_second_start - bsf_start);
+                if(bsf_second_start == -1 || bsf_second_start > bsf_start + min_seg_length - 1)
+                    bsf_len -= min_seg_length;
+                else
+                    bsf_len -= (bsf_second_start - bsf_start);
             }
             cur_valid_segs.remove(0);
         }
@@ -521,20 +568,27 @@ public class RectTreeNode {
     }
 
     public static void main(String[] args) throws IOException {
-        int length = 10000;
-        String fileName = "enter your file.csv";
-        Point2D[] point2Ds = readFromFile(fileName,0,1);
+        int length = 74000;
+//        String fileName = "C:\\Users\\64451\\Desktop\\TKDE\\tslrm-master\\tslrm-master\\code\\src\\1659250271900_illustrative_example_data.csv";
+        String fileName = "C:\\Users\\64451\\Desktop\\LR-miner\\data\\5_USD_CAD_MXN_1.txt";
+//        Point2D[] point2Ds = readFromFile(fileName,0,1);
+        Point2D[] point2Ds = ClimateDATAUtils.readPointsFromFile(new File(fileName), length);
+        System.out.println("read data finished");
 
+        int offset = 50000;
         Point2D[] init_points = new Point2D[window_length];
-        System.arraycopy(point2Ds, 0, init_points, 0,window_length);
+        System.arraycopy(point2Ds, offset, init_points, 0,window_length);
         TSPLAPointBoundKBMiner miner = new TSPLAPointBoundKBMiner(init_points, error_bound);
         cur_valid_segs = miner.buildSpecificSegments(min_seg_length);
+        System.out.println("init finished");
 
         root = new RectTreeNode();
         root.initialize();
         System.out.println(bsf_len);
+        System.out.println("node number = " +root.countNodes());
+        System.out.println("tree depth = " + root.getDepth());
 
-        for(int i= window_length; i < length;++i){
+        for(int i= window_length + offset; i < length;++i){
             root.update(point2Ds, i, miner);
             System.out.print(i);
             System.out.print(':');
@@ -556,6 +610,22 @@ public class RectTreeNode {
         }
         return data;
     }
+
+    public int countNodes(){
+        if(left == null && right == null) return 1;
+        if(left == null)   return 1 + right.countNodes();
+        if(right == null)   return 1 + left.countNodes();
+        return 1 + left.countNodes() + right.countNodes();
+    }
+
+    public int getDepth(){
+        if(left == null && right == null)   return 1;
+        if(left == null)    return right.getDepth() + 1;
+        if(right == null)   return left.getDepth() + 1;
+        return Math.max(left.getDepth(), right.getDepth()) + 1;
+    }
+
+
 
 
 }
